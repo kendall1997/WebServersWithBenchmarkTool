@@ -13,3 +13,29 @@
 [INFO : 2019-3-24 6:43:36] New Request on: letter-b.png
 [INFO : 2019-3-24 6:43:36] New Request on: letter-c.png
 [INFO : 2019-3-24 6:43:36] New Request on: letter-d.png
+[INFO : 2019-3-24 7:12:47] WebServer initializing
+[INFO : 2019-3-24 7:12:47] HTTP module initializing
+[INFO : 2019-3-24 7:13:26] New Request on: index.html
+[INFO : 2019-3-24 7:13:26] New Request on: letter-a.png
+[INFO : 2019-3-24 7:13:26] New Request on: letter-b.png
+[INFO : 2019-3-24 7:13:26] New Request on: letter-c.png
+[INFO : 2019-3-24 7:13:26] New Request on: letter-d.png
+[INFO : 2019-3-24 7:13:36] New Request on: index.html
+[INFO : 2019-3-24 7:13:36] New Request on: letter-a.png
+[INFO : 2019-3-24 7:13:36] New Request on: letter-b.png
+[INFO : 2019-3-24 7:13:36] New Request on: letter-c.png
+[INFO : 2019-3-24 7:13:36] New Request on: letter-d.png
+[INFO : 2019-3-24 7:14:27] WebServer initializing
+[INFO : 2019-3-24 7:14:27] HTTP module initializing
+[INFO : 2019-3-24 7:14:54] New Request on: index.html
+[INFO : 2019-3-24 7:14:54] New Request on: letter-a.png
+[INFO : 2019-3-24 7:14:54] New Request on: letter-b.png
+[INFO : 2019-3-24 7:14:54] New Request on: letter-c.png
+[INFO : 2019-3-24 7:14:54] New Request on: letter-d.png
+[INFO : 2019-3-24 7:15:23] WebServer initializing
+[INFO : 2019-3-24 7:15:23] HTTP module initializing
+[INFO : 2019-3-24 7:15:25] New Request on: index.html
+[INFO : 2019-3-24 7:15:25] New Request on: letter-a.png
+[INFO : 2019-3-24 7:15:25] New Request on: letter-b.png
+[INFO : 2019-3-24 7:15:25] New Request on: letter-c.png
+[INFO : 2019-3-24 7:15:25] New Request on: letter-d.png

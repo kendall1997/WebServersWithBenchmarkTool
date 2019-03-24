@@ -14,4 +14,4 @@ sudo docker run \
 	--volume $WWW:$PUBLIC_WWW_PATH \
 	--volume $LOG:$LOG_PATH \
 	--detach \
-	$IMAGE 
+	$OWNER/$IMAGE:$VERSION 

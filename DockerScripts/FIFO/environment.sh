@@ -2,6 +2,8 @@
 
 BIN_NAME=WebServerFIFO
 IMAGE=webserverfifo
+OWNER=kendallgonzalez
+VERSION=1.0.0
 
 # Volumes from Docker Container
 CONFIG_OS_PATH=/etc/webserver/
