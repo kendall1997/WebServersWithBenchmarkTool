@@ -1,0 +1,15 @@
+[Unit]
+Description= WebService Daemon
+After=network.target syslog.service
+
+[Service]
+ExecStart=/usr/bin/WebServer /etc/webserver/config.conf
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+
