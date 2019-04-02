@@ -1,17 +1,29 @@
 # Use an official ubuntu image as a parent image
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 
-# Set the working directory to /app
-WORKDIR /app
+ENV container docker
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Don't start any optional services except for the few we need.
+RUN find /etc/systemd/system \
+    /lib/systemd/system \
+    -path '*.wants/*' \
+    -not -name '*journald*' \
+    -not -name '*systemd-tmpfiles*' \
+    -not -name '*systemd-user-sessions*' \
+    -exec rm \{} \;
 
-# Install any needed packages specified in requirements.txt
-RUN apt update && apt install build-essential -y && apt-get install sudo -y && sudo make install-without-daemon
+RUN apt-get update && \
+    apt-get install -y \
+    dbus build-essential sudo curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Make port 8001 available to the world outside this container
-EXPOSE 8001
+RUN systemctl set-default multi-user.target
 
-# Run app.py when the container launches
-ENTRYPOINT ["/usr/bin/WebServer","/etc/webserver/config.conf"]
+RUN mkdir -p /etc/webserver/ && mkdir -p /var/webserver/ && mkdir -p /root/webserver
+
+COPY setup /sbin/
+
+STOPSIGNAL SIGRTMIN+3
+
+CMD ["/bin/bash", "-c", "exec /sbin/init --log-target=journal 3>&1"]

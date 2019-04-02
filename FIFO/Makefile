@@ -5,12 +5,14 @@
 # 2015087861
 
 BINARY=WebServer
+CONTAINER_INSTANCE=WebServerFIFO
 
 LIB_PATH=lib
 SRC_PATH=src
 CONF_PATH=conf
 BIN_DIR=bin
 WWW_DIR=www
+LOG_DIR=log
 
 
 LIB_OS_PATH=/lib/x86_64-linux-gnu/
@@ -33,11 +35,8 @@ install:
 uninstall:
 	sudo $(MAKE) all-uninstall --no-print-directory
 
-buildImageFull:
-	sudo docker build --tag=webserverfifo .
-
-install-without-daemon: structure structure-os binary install-library install-binary install-config install-www-content clean
-	echo "WebServer Installed for Docker"
+installDocker: install-library install-binary install-daemon
+	echo "WebServer Installed for Docker"	
 
 all: structure structure-os binary install-library install-binary install-config install-daemon install-www-content clean
 	echo "WebServer Installed"
@@ -51,7 +50,6 @@ only-bin: structure binary
 
 binary:
 	cd $(SRC_PATH) && $(MAKE)
-	sudo touch $(CONF_FILE)
 
 install-www-content:
 	cp $(WWW_DIR)/* $(PUBLIC_WWW_PATH)
@@ -93,6 +91,7 @@ uninstall-library:
 
 structure:
 	mkdir -p $(BIN_DIR)
+	mkdir -p $(LOG_DIR)
 
 structure-os:
 	mkdir -p $(PUBLIC_WWW_PATH)
@@ -118,3 +117,30 @@ clean:
 	echo "Environment cleaned"
 	sudo rm $(BIN_DIR) -rf 2>/dev/null 
 	cd $(LIB_PATH) && $(MAKE) clean --no-print-directory
+
+
+##
+## Docker Utilities
+##
+
+create:
+	@./create.sh
+
+start:
+	@./start.sh
+
+stop:
+	@./stop.sh
+
+remove:
+	@./remove.sh
+
+terminal:
+	@sudo docker exec -it $(CONTAINER_INSTANCE) /bin/bash
+
+list:
+	@sudo docker container ls
+
+fullDocker:
+	@./installDocker.sh
+	@./create.sh

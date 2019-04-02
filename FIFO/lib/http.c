@@ -25,6 +25,8 @@
  */
 void startHTTP(char* port, char* public_html){
   log4us("HTTP module initializing");
+  log4us("WebServer listening on port: ");
+  log4us(port);
   www = public_html;
   serve_forever(port);
 }
@@ -322,6 +324,10 @@ void respond(int n){
             ct = "Content-type : text/plain\r\n\r\n";
           }else if(strcmp(ext,"htmls") == 0){
             ct = "Content-type : text/html\r\n\r\n"; 
+          }else if(strcmp(ext,"html") == 0){
+            ct = "Content-type : text/html\r\n\r\n";
+          }else if(strcmp(ext,"php") == 0){
+            ct = "Content-type : text/html\r\n\r\n";
           }else if(strcmp(ext,"it") == 0){
             ct = "Content-type : audio/it\r\n\r\n";
           }else if(strcmp(ext,"isu") == 0){
