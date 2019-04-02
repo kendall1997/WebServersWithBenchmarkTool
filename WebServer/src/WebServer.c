@@ -5,7 +5,7 @@
 // 2015087861
 
 #include <stdio.h>
-#include <http.h>
+#include <middleware.h>
 #include <log4us.h>
 #include <config.h>
 
@@ -47,8 +47,8 @@ int main(int argc, char const *argv[]){
  * @brief      Starts the webserver library
  */
 void start(){
-  log4us("WebServer initializing");
-  startHTTP(environment.port, environment.folder);  
+  log4us("Initializing master scheduler");
+  startScheduler(environment);  
 }
 
 /**

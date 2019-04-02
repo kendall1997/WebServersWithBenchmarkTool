@@ -9,7 +9,7 @@
 
 #include <netdb.h>
 
-#define CONNMAX 1000
+#define CONNMAX 10000
 
 void serve_forever(const char *PORT);
 
@@ -32,7 +32,7 @@ char *request_header(const char* name);
 
 static int listenfd, clients[CONNMAX];
 static void startServer(const char *);
-static void respond(int);
+void respond(int);
 
 typedef struct { char *name, *value; } header_t;
 static header_t reqhdr[17] = { {"\0", "\0"} };

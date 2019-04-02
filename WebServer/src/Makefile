@@ -6,7 +6,7 @@
 WD=$(shell pwd)
 
 CC=gcc
-CFLAGS= -fpic -Wall -O2 
+CFLAGS=-O2 -lpthread
 
 LIB_PATH=$(WD)/../lib
 HEADER=$(WD)/../include
@@ -20,4 +20,4 @@ build: dynamic
 	@echo "Building binaries"
 
 dynamic:
-	@$(CC) -I"$(HEADER)"  -L"$(BIN_DIR)" -Wl,-rpath="$(BIN_DIR)" -o "$(BIN_DIR)/$(BIN_NAME)" $(C_FILES)
+	@$(CC) -I"$(HEADER)"  -L"$(BIN_DIR)" -Wl,-rpath="$(BIN_DIR)" -o "$(BIN_DIR)/$(BIN_NAME)" $(C_FILES) $(CFLAGS)

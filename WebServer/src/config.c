@@ -50,6 +50,11 @@ struct config get_config(char const *filename){
           configstruct.log[strcspn(configstruct.log, "\n")] = '\0';
           //printf("%s\n",configstruct.log);          
         }
+      } else if (i == 3){
+        memcpy(configstruct.scheduler,cfline,strlen(cfline));
+        //configstruct.folder[strlen(cfline)-1] = NULL;
+        configstruct.scheduler[strcspn(configstruct.scheduler, "\n")] = '\0';
+        //printf("%s\n",configstruct.folder);
       }
       i++;
     } // End while

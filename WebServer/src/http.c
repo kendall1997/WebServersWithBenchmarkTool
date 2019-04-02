@@ -18,6 +18,7 @@
 #include <signal.h>
 
 #include <http.h>
+#include <middleware.h>
 #include <log4us.h>
 
 /**
@@ -63,7 +64,7 @@ void serve_forever(const char *PORT){
       perror("accept() error");
     }else{
       // Due to is sequential, the FIFO policy is implemeted here
-      respond(slot);
+      scheduler(slot);
     }
     while (clients[slot]!=-1) slot = (slot+1)%CONNMAX;
   }
