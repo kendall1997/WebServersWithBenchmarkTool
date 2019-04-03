@@ -5,7 +5,10 @@
 # 2015087861
 
 BINARY=WebServer
-CONTAINER_INSTANCE=WebServer
+
+CONTAINER_INSTANCE_FIFO=WebServerFIFO
+CONTAINER_INSTANCE_FORKED=WebServerFORKED
+CONTAINER_INSTANCE_THREADED=WebServerTHREADED
 
 LIB_PATH=lib
 SRC_PATH=src
@@ -32,13 +35,13 @@ install:
 uninstall:
 	sudo $(MAKE) all-uninstall --no-print-directory
 
-installDocker: install-library install-binary install-daemon
+installDocker: install-binary install-daemon
 	echo "WebServer Installed for Docker"	
 
-all: structure structure-os binary install-library install-binary install-config install-daemon install-www-content clean
+all: structure structure-os binary install-binary install-config install-daemon install-www-content clean
 	echo "WebServer Installed"
 
-all-uninstall: undo-structure-os uninstall-library uninstall-binary uninstall-daemon
+all-uninstall: undo-structure-os uninstall-binary uninstall-daemon
 	echo "WebServer Unistalled"
 
 only-bin: structure binary 
@@ -120,24 +123,59 @@ clean:
 ## Docker Utilities
 ##
 
-create:
-	@./create.sh
 
-start:
-	@./start.sh
+fifo-create:
+	@cd DockerScripts/FIFO && ./create.sh
 
-stop:
-	@./stop.sh
+fifo-start:
+	@cd DockerScripts/FIFO && ./start.sh
 
-remove:
-	@./remove.sh
+fifo-stop:
+	@cd DockerScripts/FIFO && ./stop.sh
 
-terminal:
-	@sudo docker exec -it $(CONTAINER_INSTANCE) /bin/bash
+fifo-remove:
+	@cd DockerScripts/FIFO && ./remove.sh
+
+fifo-terminal:
+	@sudo docker exec -it $(CONTAINER_INSTANCE_FIFO) /bin/bash
+
+forked-create:
+	@cd DockerScripts/FORKED && ./create.sh
+
+forked-start:
+	@cd DockerScripts/FORKED && ./start.sh
+
+forked-stop:
+	@cd DockerScripts/FORKED && ./stop.sh
+
+forked-remove:
+	@cd DockerScripts/FORKED && ./remove.sh
+
+forked-terminal:
+	@sudo docker exec -it $(CONTAINER_INSTANCE_FORKED) /bin/bash
+
+threaded-create:
+	@cd DockerScripts/THREADED && ./create.sh
+
+threaded-start:
+	@cd DockerScripts/THREADED && ./start.sh
+
+threaded-stop:
+	@cd DockerScripts/THREADED && ./stop.sh
+
+threaded-remove:
+	@cd DockerScripts/THREADED && ./remove.sh
+
+threaded-terminal:
+	@sudo docker exec -it $(CONTAINER_INSTANCE_THREADED) /bin/bash
 
 list:
 	@sudo docker container ls
 
+
+
+
 fullDocker:
+	@cd DockerScripts
 	@./installDocker.sh
 	@./create.sh

@@ -19,13 +19,13 @@ void serve_forever(const char *PORT);
 
 // Client request
 
-char    *method,    // "GET" or "POST"
+/*char    *method,    // "GET" or "POST"
         *uri,       // "/index.html" things before '?'
         *qs,        // "a=1&b=2"     things after  '?'
         *prot;      // "HTTP/1.1"
-
-char    *payload;     // for POST
-int      payload_size;
+*/ // Need to be local
+//char    *payload;     // for POST // need to be local on each thread
+//int      payload_size; // need to be local on each thread
 
 char *request_header(const char* name);
 
@@ -36,13 +36,12 @@ void respond(int);
 
 typedef struct { char *name, *value; } header_t;
 static header_t reqhdr[17] = { {"\0", "\0"} };
-static int clientfd;
+// static int clientfd; // need to be local on each thread
 
-static char *buf;
+// static char *buf; // need to be local on each thread
 static char* www;
 
 void startHTTP(char* port,char* public_html);
-
 
 // some interesting macro for `route()`
 #define ROUTE_START()       if (0) {

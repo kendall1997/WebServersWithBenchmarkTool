@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /usr/bin/
+./WebServer /etc/webserver/config.conf

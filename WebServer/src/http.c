@@ -156,8 +156,16 @@ void respond(int n){
     // variable where the status of the receive information will be stored, error if is lower than 0
     int rcvd;
 
+    char    *method,    // "GET" or "POST"
+            *uri,       // "/index.html" things before '?'
+            *qs,        // "a=1&b=2"     things after  '?'
+            *prot;      // "HTTP/1.1"
+
+    char    *payload;     // for POST // need to be local on each thread
+    int      payload_size;
+
     // buffer where the request data will be stored
-    buf = malloc(65535);
+    char* buf = (char*) malloc(65535);
 
     // receive data from client's socket
     rcvd=recv(clients[n], buf, 65535, 0);
@@ -245,7 +253,7 @@ void respond(int n){
       FILE *fs = fopen(fs_name, "r");
 
       // get the client socket id
-      clientfd = clients[n];
+      int clientfd = clients[n];
 
       // File exists?
       if(fs == NULL){
@@ -396,6 +404,7 @@ void respond(int n){
           bzero(sdbuf, LENGTH); 
           int fs_block_sz; 
           while((fs_block_sz = fread(sdbuf, sizeof(char), LENGTH, fs))>0){
+            printf("Sending to socket [%d] slot [%d]\n", clientfd, n);
             if(send(clientfd, sdbuf, fs_block_sz, 0) < 0){
               printf("ERROR: Failed to send file %s.\n", fs_name);
              break;
@@ -409,6 +418,7 @@ void respond(int n){
         // HTTP protocol closes the connection when data delivered
         shutdown(clientfd, SHUT_RDWR);
         close(clientfd);
+        printf("Closed socket [%d] slot [%d]\n", clientfd, n);
         clients[n]=-1;
       }
 
