@@ -404,7 +404,6 @@ void respond(int n){
           bzero(sdbuf, LENGTH); 
           int fs_block_sz; 
           while((fs_block_sz = fread(sdbuf, sizeof(char), LENGTH, fs))>0){
-            printf("Sending to socket [%d] slot [%d]\n", clientfd, n);
             if(send(clientfd, sdbuf, fs_block_sz, 0) < 0){
               printf("ERROR: Failed to send file %s.\n", fs_name);
              break;
@@ -418,7 +417,6 @@ void respond(int n){
         // HTTP protocol closes the connection when data delivered
         shutdown(clientfd, SHUT_RDWR);
         close(clientfd);
-        printf("Closed socket [%d] slot [%d]\n", clientfd, n);
         clients[n]=-1;
       }
 

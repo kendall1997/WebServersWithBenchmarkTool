@@ -45,15 +45,15 @@ void scheduler(int slot){
   
   constant SCHEDULER = environment.scheduler;
 
-  if(strcmp(SCHEDULER,"FIFO") == 0){
+  if(strcmp(SCHEDULER,"FIFO") == 0){ // Handler for FIFO algorithm
 
     scheduler_fifo(slot, requests);
 
-  }else if(strcmp(SCHEDULER,"FORKED") == 0){
+  }else if(strcmp(SCHEDULER,"FORKED") == 0){ // Handler for FORKED algorithm
 
     scheduler_forked(slot, requests);
 
-  }else if(strcmp(SCHEDULER,"THREADED") == 0){
+  }else if(strcmp(SCHEDULER,"THREADED") == 0){ // Handler for THREADED algorithm
 
     scheduler_threaded(slot, requests);
 

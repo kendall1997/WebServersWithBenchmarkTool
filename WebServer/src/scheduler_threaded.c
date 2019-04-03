@@ -23,20 +23,38 @@
  */
 void scheduler_threaded(int slot, struct Queue* requests){
 
-  int err = 0, count = 0; 
+  // Threads counter, will be useful for Pre-Threaded implementation
+  int tstatus = 0, count = 0; 
+
+  // Thread identifier;
   pthread_t tid; 
 
-  err = pthread_create (&tid, NULL, backgroundTask, (void*) &slot); 
-  pthread_detach(tid);
-  count++; 
+  // Create a thread saving if the creation was successful
+  tstatus = pthread_create (&tid, NULL, backgroundTask, (void*) &slot);
 
-  printf("Acá\n");
+  // Let it work in the background
+  pthread_detach(tid);
+
+  // Increase the threads counter
+  count++; 
   
 }
 
+/**
+ * @brief      This method allow us run the respond method from the http library
+ *
+ * @param      package  The package, contains the slot id
+ *
+ * @return     a void* pointer, is useful only when a function return pthread_exit is executed
+ */
 void* backgroundTask(void* package){
+
+  // Desreference a cast to integer the slot
   int slot =  *(( int* ) package);
-  printf("Slot %d\n", slot);
+
+  // Execute the http respond task
   respond(slot);
+
+  // Return so the tread will exit
   return NULL;
 }
