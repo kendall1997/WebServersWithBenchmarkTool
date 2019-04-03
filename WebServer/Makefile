@@ -116,7 +116,7 @@ service-stop:
 clean:
 	echo "Environment cleaned"
 	sudo rm $(BIN_DIR) -rf 2>/dev/null 
-	cd $(LIB_PATH) && $(MAKE) clean --no-print-directory
+	# cd $(LIB_PATH) && $(MAKE) clean --no-print-directory
 
 
 ##

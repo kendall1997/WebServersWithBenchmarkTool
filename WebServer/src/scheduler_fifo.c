@@ -28,8 +28,5 @@ void scheduler_fifo(int slot, struct Queue* requests){
 
   // Remove it from the queue
   dequeue(requests);
-
-  // debug
-  printf("Amount of requests: %d\n", getSize(requests));
   
 }
