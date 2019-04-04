@@ -68,7 +68,7 @@ extern struct futex gfutex;
    The mythread_attr_t argument can optionally specify the stack size to be used
    the newly created thread.
  */
-int mythread_create(mythread_t *thread_ID)
+int mythread_detach(mythread_t *thread_ID)
 {
 
     /* pointer to the stack used by the child process to be created by clone later */
