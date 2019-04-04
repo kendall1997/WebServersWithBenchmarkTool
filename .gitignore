@@ -52,3 +52,6 @@ Mkfile.old
 dkms.conf
 
 .vscode
+mythreads/src/*.o
+mythreads/src/*.a
+mythreads/src/mythread_test

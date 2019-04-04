@@ -60,32 +60,6 @@ extern struct futex gfutex;
    to main and idle threads. The following function adds the tcb for main thread
    in front of the queue.
 */
-static int __mythread_add_main_tcb()
-{
-    printf("add_main_tcb: Creating node for Main thread \n");
-    main_tcb = (mythread_private_t *)malloc(sizeof(mythread_private_t));
-    if (main_tcb == NULL)
-    {
-        printf("add_main_tcb: Error allocating memory for main node\n");
-        return -ENOMEM;
-    }
-
-    main_tcb->start_func = NULL;
-    main_tcb->args = NULL;
-    main_tcb->state = READY;
-    main_tcb->returnValue = NULL;
-    main_tcb->blockedForJoin = NULL;
-
-    /* Get the main's tid and put it in its corresponding tcb. */
-    main_tcb->tid = __mythread_gettid();
-
-    /* Initialize futex to zero */
-    futex_init(&main_tcb->sched_futex, 1);
-
-    /* Put it in the Queue of thread blocks */
-    mythread_q_add(main_tcb);
-    return 0;
-}
 
 /* The mythread_create() function.
    This creates a shared process context by using the clone system call.
@@ -94,9 +68,7 @@ static int __mythread_add_main_tcb()
    The mythread_attr_t argument can optionally specify the stack size to be used
    the newly created thread.
  */
-int mythread_create(mythread_t *new_thread_ID,
-                    mythread_attr_t *attr,
-                    void *(*start_func)(void *), void *arg)
+int mythread_create(mythread_t *thread_ID)
 {
 
     /* pointer to the stack used by the child process to be created by clone later */
@@ -105,27 +77,11 @@ int mythread_create(mythread_t *new_thread_ID,
     unsigned long stackSize;
     mythread_private_t *new_node;
     pid_t tid;
-    int retval;
 
     /* Flags to be passed to clone system call. 
 	   This flags variable is picked up from pthread source code - with CLONE_PTRACE removed. 
 	 */
     int clone_flags = (CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGNAL | CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID | CLONE_SYSVSEM);
-
-    if (mythread_q_head == NULL)
-    {
-        /* This is the very first mythread_create call. Set up the Q first with tcb nodes for main thread. */
-        retval = __mythread_add_main_tcb();
-        if (retval != 0)
-            return retval;
-
-        /* Initialise the global futex */
-        futex_init(&gfutex, 1);
-
-        /* Now create the node for Idle thread with a recursive call to mythread_create(). */
-        printf("create: creating node for Idle thread \n");
-        mythread_create(&idle_u_tcb, NULL, mythread_idle, NULL);
-    }
 
     /* This particular piece of code was added as a result of a weird bug encountered in the __futex_down().
 	 * In 2.6.35 (our kernel version), all threads can access main thread's stack, but

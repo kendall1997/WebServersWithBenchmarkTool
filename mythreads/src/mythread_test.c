@@ -13,22 +13,35 @@
 #include <mythread.h>
 
 /* Number of threads to start */
-#define NTHREADS	8
+#define NTHREADS 8
 
 /* This function will first increment count by 50, yield. When it gets the 
  * control back, it will increment count again and then exit
  */
+void *func()
+{
+    int i = 0;
+
+    while (i <= 10)
+    {
+        printf("ASCDAS\n");
+        i++;
+    }
+    mythread_exit(NULL);
+    return NULL;
+}
+
 void *thread_func(void *arg)
 {
-	int *count = (int *)arg;
+    int *count = (int *)arg;
 
-	*count = *count + 50;
-	LOG_PRINTF("Thread %ld: Incremented count by 50 and will now yield\n", (unsigned long)mythread_self().tid);
-	mythread_yield();
-	*count = *count + 50;
-	LOG_PRINTF("Thread %ld: Incremented count by 50 and will now exit\n", (unsigned long)mythread_self().tid);
-	mythread_exit(NULL);
-	return NULL;
+    *count = *count + 50;
+    LOG_PRINTF("Thread %ld: Incremented count by 50 and will now yield\n", (unsigned long)mythread_self().tid);
+    mythread_yield();
+    *count = *count + 50;
+    LOG_PRINTF("Thread %ld: Incremented count by 50 and will now exit\n", (unsigned long)mythread_self().tid);
+    mythread_exit(NULL);
+    return NULL;
 }
 
 /* This is a simple demonstration of how to use the mythread library.
@@ -36,22 +49,30 @@ void *thread_func(void *arg)
  */
 int main()
 {
-	mythread_t threads[NTHREADS];
-	int count[NTHREADS];
-	int i;
-	char *status;
+    // mythread_t threads[NTHREADS];
+    // int count[NTHREADS];
+    // int i;
+    char *status;
+    mythread_t threads;
 
-	for (i = 0; i < NTHREADS; i++) {
-		count[i] = i;
-		mythread_create(&threads[i], NULL, thread_func, &count[i]);
-	}
-	for (i = 0; i < NTHREADS; i++) {
-		LOG_PRINTF("Main: Will now wait for thread %ld. Yielding..\n", (unsigned long)threads[i].tid);
-		mythread_join(threads[i], (void **)&status);
-		LOG_PRINTF("Main: Thread %ld exited and increment count to %d\n", (unsigned long)threads[i].tid, count[i]);
-	}
-	LOG_PRINTF("Main: All threads completed execution. Will now exit..\n");
-	mythread_exit(NULL);
+    mythread_create(&threads, NULL, func, NULL);
 
-	return 0;
+    mythread_join(threads, (void **)&status);
+    LOG_PRINTF("Main: All threads completed execution. Will now exit..\n");
+    mythread_exit(NULL);
+    // for (i = 0; i < NTHREADS; i++)
+    // {
+    //     count[i] = i;
+    //     mythread_create(&threads[i], NULL, thread_func, &count[i]);
+    // }
+    // for (i = 0; i < NTHREADS; i++)
+    // {
+    //     LOG_PRINTF("Main: Will now wait for thread %ld. Yielding..\n", (unsigned long)threads[i].tid);
+    //     mythread_join(threads[i], (void **)&status);
+    //     LOG_PRINTF("Main: Thread %ld exited and increment count to %d\n", (unsigned long)threads[i].tid, count[i]);
+    // }
+    // LOG_PRINTF("Main: All threads completed execution. Will now exit..\n");
+    // mythread_exit(NULL);
+
+    return 0;
 }
