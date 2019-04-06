@@ -1,12 +1,4 @@
-/* Single Author info:
- *      sskanitk   Salil S Kanitkar
- * Group info:
- *      jhshah     Jitesh H Shah
- *      sskanitk  Salil S Kanitkar
- *      ajalgao    Aditya A Jalgaonkar
- */
-
-#define _GNU_SOURCE /* See feature_test_macros(7) */
+#define _GNU_SOURCE
 
 #include <malloc.h>
 #include <string.h>
@@ -25,7 +17,6 @@
 /* We include the header files defined by us which are required for the create operations. 
  */
 #include <mythread.h>
-#include <futex.h>
 #include <mythread_q.h>
 
 /* To be able to use getttid(), we define a function for ourselves that 
@@ -54,43 +45,6 @@ int mythread_create(mythread_t *new_thread_ID,
                     void *(*start_func)(void *), void *arg)
 {
 
-    // void *stack;
-    // pid_t pid;
-
-    // /* Allocate the stack */
-    // stack = malloc(FIBER_STACK);
-    // if (stack == 0)
-    // {
-    //     perror("malloc: could not allocate stack");
-    //     exit(1);
-    // }
-
-    // printf("Creating child thread\n");
-
-    // /* Call the clone system call to create the child thread */
-    // pid = clone(start_func, (char *)stack + FIBER_STACK,
-    //             SIGCHLD | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | CLONE_VM, 0);
-    // if (pid == -1)
-    // {
-    //     perror("clone");
-    //     exit(2);
-    // }
-
-    // printf("created new thread with id: %ld\n", (unsigned long)pid);
-
-    // /* Wait for the child thread to exit */
-    // pid = waitpid(pid, 0, 0);
-    // if (pid == -1)
-    // {
-    //     perror("waitpid");
-    //     exit(3);
-    // }
-
-    // /* Free the stack */
-    // free(stack);
-    // printf("Child thread returned and stack freed.\n");
-
-    /* pointer to the stack used by the child process to be created by clone later */
     char *child_stack;
 
     unsigned long stackSize;
@@ -98,10 +52,6 @@ int mythread_create(mythread_t *new_thread_ID,
     pid_t tid;
     // int retval;
 
-    /* This particular piece of code was added as a result of a weird bug encountered in the __futex_down().
-     * In 2.6.35 (our kernel version), all threads can access main thread's stack, but
-     * on the OS machine, this stack is somehow private to main thread only.
-     */
     new_node = (mythread_private_t *)malloc(sizeof(mythread_private_t));
     if (new_node == NULL)
     {
@@ -128,6 +78,8 @@ int mythread_create(mythread_t *new_thread_ID,
         return -ENOMEM;
     }
 
+    int FLAGS = (CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGNAL | CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID | CLONE_SYSVSEM);
+
     /* We leave space for one invocation at the base of the stack */
     child_stack = child_stack + stackSize - sizeof(sigset_t);
 
@@ -139,14 +91,12 @@ int mythread_create(mythread_t *new_thread_ID,
 
     new_node->returnValue = NULL;
     new_node->blockedForJoin = NULL;
-    /* Initialize the tcb's sched_futex to zero. */
-    futex_init(&new_node->sched_futex, 0);
 
     /* Put it in the Q of thread blocks */
     mythread_q_add(new_node);
 
     /* Call clone with pointer to wrapper function. TCB will be passed as arg to wrapper function. */
-    if ((tid = clone((void *)*start_func, (char *)child_stack, SIGCHLD | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | CLONE_VM, 0)) == -1)
+    if ((tid = clone((void *)*start_func, (char *)child_stack, FLAGS, 0)) == -1)
 
     {
         printf("clone failed! \n");
@@ -166,9 +116,7 @@ int mythread_create(mythread_t *new_thread_ID,
 
     printf("create: Finished initialising new thread: %ld\n", (unsigned long)new_thread_ID->tid);
 
-    //tid = kill(tid, SIGCONT);
-
-    tid = kill(tid, SIGSTOP);
+    // tid = kill(tid, SIGSTOP);
 
     return 0;
 }
