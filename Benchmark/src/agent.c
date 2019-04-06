@@ -2,21 +2,12 @@
 #include <curl/curl.h>
 #include <time.h>
 #include <string.h>
+#include <stdlib.h>
  
 
-struct summary {
-	double ResponseTime;
-	double size;
-    char* DateStart;
-    char* DateEnd;
-    char* TypeOfFile;
-    char* name;
-};
+#include <agent.h>
  
-struct FtpFile {
-  const char *filename;
-  FILE *stream;
-};
+
  
 static size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream)
 {
@@ -30,7 +21,7 @@ static size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream)
   return fwrite(buffer, size, nmemb, out->stream);
 }
 
-struct summary pull(char* url){
+struct summary* pull(char* url){
 
   CURL *curl;
   CURLcode res;
@@ -41,7 +32,7 @@ struct summary pull(char* url){
   char* ext = (char*) (strrchr(url, '.') + 1);
 
   struct FtpFile ftpfile = {
-    "10MB.zip", /* name to store the file as if successful */ 
+    "/dev/null", /* name to store the file as if successful */ 
     NULL
   };
 
@@ -81,32 +72,20 @@ struct summary pull(char* url){
   curl_global_cleanup();
   
   const time_t end = time(NULL);
+
+
   seconds = (end - start);
   size = size/(1024*1024);
-  printf("fecha: %s\n", asctime(localtime(&start)));
-  printf("fecha: %s\n", asctime(localtime(&end)));
   
-  struct summary tmp;
-    tmp.ResponseTime = seconds;
-    tmp.size = size;
-    tmp.DateStart = asctime(localtime(&start));
-    tmp.DateEnd = asctime(localtime(&end));
-    tmp.name = filename;
-    tmp.TypeOfFile = ext;
-	return tmp;
+  struct summary* tmp = malloc(sizeof(struct summary));
 
-}
- 
- 
-int main(void)
-{
-    char* url = "http://autogestion.metrotel.com.ar/speedtest/archivo10MB.zip";
-    struct summary data = pull(url);
-    
-    printf("time: %f\n", data.ResponseTime);
-    printf("size: %.0f MB\n", data.size);
-    printf("Date Start: %s\n", data.DateStart);
-    printf("Date End: %s \n", data.DateEnd);
-    printf("name: %s\n", data.name);
-    printf("Type of File: %s \n", data.TypeOfFile);
+  tmp->ResponseTime = (int) seconds;
+  tmp->size = size;
+  tmp->DateEnd = end;
+  tmp->DateStart = start;
+  tmp->name = filename;
+  tmp->TypeOfFile = ext;
+	
+  return tmp;
+
 }
