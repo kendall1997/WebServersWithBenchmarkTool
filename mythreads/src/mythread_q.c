@@ -1,10 +1,4 @@
-/* Single Author info:
- *      sskanitk   Salil S Kanitkar
- * Group info:
- *      jhshah     Jitesh H Shah
- *      sskanitk   Salil S Kanitkar
- *      ajalgao    Aditya A Jalgaonkar
- */
+
 
 /* We use a Queue Data structure for managing the tcb corresponding to each thread created. 
    The queue is implemented using a double ended linked list.

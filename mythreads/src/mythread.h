@@ -2,14 +2,6 @@
  * mythread.h -- interface of user threads library
  */
 
-/* Single Author info:
- * 	ajalgao	 Aditya A Jalgaonkar
- * Group info:
- * 	jhshah	 Jitesh H Shah
- * 	sskanitk Salil S Kanitkar
- * 	ajalgao	 Aditya A Jalgaonkar
- */
-
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>

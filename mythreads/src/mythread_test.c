@@ -1,11 +1,3 @@
-/* Single Author info:
- * 	ajalgao	Aditya A Jalgaonkar
- * Group info:
- * 	jhshah	Jitesh H Shah
- * 	salilk	Salil S Kanitkar
- * 	ajalgao	Aditya A Jalgaonkar
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -1,12 +1,4 @@
-/* Single Author info:
- *      sskanitk   Salil S Kanitkar
- * Group info:
- *      jhshah     Jitesh H Shah
- *      sskanitk  Salil S Kanitkar
- *      ajalgao    Aditya A Jalgaonkar
- */
-
-#define _GNU_SOURCE /* See feature_test_macros(7) */
+#define _GNU_SOURCE
 
 #include <malloc.h>
 #include <string.h>
@@ -60,10 +52,6 @@ int mythread_create(mythread_t *new_thread_ID,
     pid_t tid;
     // int retval;
 
-    /* This particular piece of code was added as a result of a weird bug encountered in the __futex_down().
-     * In 2.6.35 (our kernel version), all threads can access main thread's stack, but
-     * on the OS machine, this stack is somehow private to main thread only.
-     */
     new_node = (mythread_private_t *)malloc(sizeof(mythread_private_t));
     if (new_node == NULL)
     {

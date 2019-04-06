@@ -1,11 +1,3 @@
-/* Single Author info:
- * 	jhshah 	 Jitesh H Shah
- * Group info:
- * 	jhshah	 Jitesh H Shah
- * 	sskanitk Salil S Kanitkar
- * 	ajalgao	 Aditya A Jalgaonkar
- */
-
 #include <mythread.h>
 #include <malloc.h>
 #include <mythread_q.h>
@@ -45,8 +37,4 @@ void mythread_exit(void *value_ptr)
     free(thread->args);
 
     syscall(SYS_exit, 0);
-    // __mythread_dispatcher(self_ptr);
-
-    /* Suicide */
-    // __mythread_do_exit();
 }

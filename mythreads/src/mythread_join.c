@@ -17,6 +17,19 @@ int mythread_join(mythread_t target_thread, void **status)
 
     pid_t t;
 
+    target = mythread_q_search(target_thread.tid);
+
+    if (target->state == DEFUNCT)
+    {
+        *status = target->returnValue;
+        return 0;
+    }
+
+    if (target->blockedForJoin != NULL)
+    {
+        return -1;
+    }
+
     t = waitpid(target_thread.tid, 0, 0);
 
     if (t == -1)
@@ -26,6 +39,6 @@ int mythread_join(mythread_t target_thread, void **status)
     }
     printf("Child thread returned and stack freed.\n");
 
-    //*status = target->returnValue;
+    *status = target->returnValue;
     return 0;
 }
