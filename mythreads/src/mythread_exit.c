@@ -12,40 +12,39 @@
 
 #include <sys/types.h>
 #include <sys/syscall.h>
-
-/* Calling the glibc's exit() exits the process. Directly call the syscall
- * instead
- */
-static void __mythread_do_exit()
-{
-    syscall(SYS_exit, 0);
-}
+#include <pthread.h>
 
 /* See whether anyone is blocking on us for a join. If yes, mark that thread as READY
  * and kill ourselves
  */
 void mythread_exit(void *value_ptr)
 {
-    pid_t t;
+    pid_t t = syscall(SYS_gettid);
 
-    /* Get pointer to our TCB structure */
-    t = getgid();
+    mythread_private_t *thread = mythread_q_search(t);
 
-    mythread_private_t *thread;
+    printf("STATE: %d\n", t);
 
-    thread = mythread_q_search(t);
+    thread->state = DEFUNCT;
+    thread->returnValue = value_ptr;
 
-    printf("STATE: %d\n", thread->tid);
+    //printf("STATE: %d\n", thread->state);
+
+    //thread->state = DEFUNCT;
+
     /* Don't remove the node from the list yet. We still have to collect the return value */
-    // self_ptr->state = DEFUNCT;
-    // self_ptr->returnValue = value_ptr;
 
     // /* Change the state of any thread waiting on us. FIFO dispatcher will do the
     //  * needful
     //  */
-    // if (self_ptr->blockedForJoin != NULL)
-    //     self_ptr->blockedForJoin->state = READY;
+    if (thread->blockedForJoin != NULL)
+    {
+        thread->blockedForJoin->state = READY;
+    }
 
+    free(thread->args);
+
+    syscall(SYS_exit, 0);
     // __mythread_dispatcher(self_ptr);
 
     /* Suicide */

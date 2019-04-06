@@ -14,7 +14,6 @@
 /* We include the header files defined by us which are required for the create operations. 
  */
 #include <mythread.h>
-#include <futex.h>
 #include <mythread_q.h>
 
 /* To be able to use getttid(), we define a function for ourselves that 

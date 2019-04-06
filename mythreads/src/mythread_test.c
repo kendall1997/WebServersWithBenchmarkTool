@@ -24,11 +24,10 @@ void *func(void *arg)
 
     while (1)
     {
-        LOG_PRINTF("Thread %ld: \n", (unsigned long)mythread_self().tid);
+
         //i++;
     }
 
-    LOG_PRINTF("Thread %ld: Incremented count by 50 and will now exit\n", (unsigned long)mythread_self().tid);
     mythread_exit(NULL);
     return NULL;
 }
@@ -55,6 +54,7 @@ void *threadFunction()
         i += 1;
     }
 
+    mythread_exit(NULL);
     return NULL;
 }
 
@@ -63,10 +63,9 @@ void *thread_func(void *arg)
     int *count = (int *)arg;
 
     *count = *count + 50;
-    LOG_PRINTF("Thread %ld: Incremented count by 50 and will now yield\n", (unsigned long)mythread_self().tid);
-    mythread_yield();
+
     *count = *count + 50;
-    LOG_PRINTF("Thread %ld: Incremented count by 50 and will now exit\n", (unsigned long)mythread_self().tid);
+
     //mythread_exit(NULL);
     return NULL;
 }
@@ -84,8 +83,10 @@ int main()
     //mythread_t t2;
 
     mythread_create(&t1, NULL, threadFunction, NULL);
-    //mythread_detach(t1);
-    mythread_join(t1, (void **)&status);
+
+    while (1)
+    {
+    };
 
     // mythread_create(&t2, NULL, func1, NULL);
 

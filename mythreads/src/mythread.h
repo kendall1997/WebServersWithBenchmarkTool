@@ -13,7 +13,6 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <futex.h>
 #include <string.h>
 
 #ifndef MYTHREAD_H
@@ -48,18 +47,12 @@ typedef struct mythread_private
     void *args;                              /* The arguments to be passed to the thread function. */
     void *returnValue;                       /* The return value that thread returns. */
     struct mythread_private *blockedForJoin; /* Thread blocking on this thread */
-    struct futex sched_futex;                /* Futex used by the dispatcher to schedule this thread */
     struct mythread_private *prev, *next;
 
 } mythread_private_t;
 
 extern mythread_private_t *mythread_q_head; /* The pointer pointing to head node of the TCB queue */
 /* add your code here */
-
-/*
- * mythread_self - thread id of running thread
- */
-mythread_t mythread_self(void);
 
 /*
  * mythread_create - prepares context of new_thread_ID as start_func(arg),
@@ -71,11 +64,6 @@ int mythread_create(mythread_t *new_thread_ID,
                     mythread_attr_t *attr,
                     void *(*start_func)(void *),
                     void *arg);
-
-/*
- * mythread_yield - switch from running thread to the next ready one
- */
-int mythread_yield(void);
 
 /*
  * mythread_join - suspend calling thread if target_thread has not finished,
@@ -94,47 +82,5 @@ int mythread_detach(mythread_t thread_ID);
 void mythread_exit(void *retval);
 
 /* Private functions */
-
-/* Get the tid of the current thread */
-pid_t __mythread_gettid();
-
-/* Get the pointer to the private structure of this thread */
-mythread_private_t *__mythread_selfptr();
-
-/* Dispatcher - The thread scheduler */
-int __mythread_dispatcher(mythread_private_t *);
-void __mythread_debug_futex_init();
-
-/* Debugging stuff */
-extern char debug_msg[1000];
-extern struct futex debug_futex;
-
-#ifdef DEBUG
-#define DEBUG_PRINTF(...)                   \
-    __mythread_debug_futex_init();          \
-    futex_down(&debug_futex);               \
-    sprintf(debug_msg, __VA_ARGS__);        \
-    write(1, debug_msg, strlen(debug_msg)); \
-    futex_up(&debug_futex);
-#else
-#define DEBUG_PRINTF(...) \
-    do                    \
-    {                     \
-    } while (0);
-#endif
-
-#define ERROR_PRINTF(...)                   \
-    __mythread_debug_futex_init();          \
-    futex_down(&debug_futex);               \
-    sprintf(debug_msg, __VA_ARGS__);        \
-    write(1, debug_msg, strlen(debug_msg)); \
-    futex_up(&debug_futex);
-
-#define LOG_PRINTF(...)                     \
-    __mythread_debug_futex_init();          \
-    futex_down(&debug_futex);               \
-    sprintf(debug_msg, __VA_ARGS__);        \
-    write(1, debug_msg, strlen(debug_msg)); \
-    futex_up(&debug_futex);
 
 #endif /* MYTHREAD_H */
