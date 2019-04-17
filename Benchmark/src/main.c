@@ -12,6 +12,7 @@
 
 // Auxiliar states
 
+static int total_threads;
 static int total_runs;
 static int total_cycles;
 static int current_runs;
@@ -35,13 +36,15 @@ int main(int argc, char const *argv[]){
   int threads = atoi(threads_str);
   int cycles = atoi(cycles_str);
 
+  total_threads = threads;
+
   char url[300];
   sprintf(url, "http://%s:%s/%s", host, port, file);
 
 
   printf("Remote resource to be downloaded for benchmarking, %s\n", url);
 
-  printf("Run, Iteration, DateTimeStart, DateTimeEnd, Time Elapsed, File Size, File Name, Type of File\n");
+  printf("Threads, Run, Iteration, DateTimeStart, DateTimeEnd, Time Elapsed, File Size, Data Transfer Speed, File Name, Type of File\n");
 
 
   work(url, threads, cycles);
@@ -106,7 +109,7 @@ void* task(void* args){
     tmp1[strlen(tmp1)-1] = 0;
     tmp2[strlen(tmp2)-1] = 0;
 
-    printf("%d, %d, %s, %s, %d, %.0f, %s, %s\n", current_runs, iteration, tmp1, tmp2, run->ResponseTime, run->size, run->name, run->TypeOfFile);
+    printf("%d, %d, %d, %s, %s, %d, %.2f MB, %.2f Kb/s, %s, %s\n", total_threads, current_runs + 1 , iteration, tmp1, tmp2, run->ResponseTime, run->size, run->speedmed, run->name, run->TypeOfFile);
 
     // Lock for store result
     pthread_mutex_lock(&lock);
