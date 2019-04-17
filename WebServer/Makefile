@@ -176,6 +176,4 @@ list:
 
 
 fullDocker:
-	@cd DockerScripts
-	@./installDocker.sh
-	@./create.sh
+	@cd DockerScripts && ./installDocker.sh

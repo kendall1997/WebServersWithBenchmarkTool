@@ -24,7 +24,7 @@ LOG=$BASE/log
 INSTALL_PATH=/root/webserver
 
 # Networking
-HOST_PORT=9003
+HOST_PORT=0.0.0.0:8003
 CONTAINER_PORT=8003
 
 
