@@ -30,14 +30,15 @@ int mythread_join(mythread_t target_thread, void **status)
         return -1;
     }
 
-    t = waitpid(target_thread.tid, 0, 0);
-
+    t = waitpid(target->tid, 0, 0);
     if (t == -1)
     {
         perror("waitpid");
         exit(3);
     }
-    printf("Child thread returned and stack freed.\n");
+
+    //setbuf(stdout, NULL);
+    printf("Child thread %d returned and stack freed.\n", target->tid);
 
     *status = target->returnValue;
     return 0;
