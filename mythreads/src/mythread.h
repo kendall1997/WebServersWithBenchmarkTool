@@ -44,7 +44,6 @@ typedef struct mythread_private
 } mythread_private_t;
 
 extern mythread_private_t *mythread_q_head; /* The pointer pointing to head node of the TCB queue */
-/* add your code here */
 
 /*
  * mythread_create - prepares context of new_thread_ID as start_func(arg),

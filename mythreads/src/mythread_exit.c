@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <mythread.h>
 #include <malloc.h>
 #include <mythread_q.h>
@@ -5,6 +6,8 @@
 #include <sys/types.h>
 #include <sys/syscall.h>
 #include <pthread.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 /* See whether anyone is blocking on us for a join. If yes, mark that thread as READY
  * and kill ourselves
@@ -15,14 +18,8 @@ void mythread_exit(void *value_ptr)
 
     mythread_private_t *thread = mythread_q_search(t);
 
-    printf("STATE: %d\n", t);
-
     thread->state = DEFUNCT;
     thread->returnValue = value_ptr;
-
-    //printf("STATE: %d\n", thread->state);
-
-    //thread->state = DEFUNCT;
 
     /* Don't remove the node from the list yet. We still have to collect the return value */
 
@@ -35,6 +32,9 @@ void mythread_exit(void *value_ptr)
     }
 
     free(thread->args);
+
+    // setbuf(stdout, NULL);
+    // printf("THREAD %d EXIT", thread->tid);
 
     syscall(SYS_exit, 0);
 }

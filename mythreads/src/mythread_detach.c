@@ -22,14 +22,11 @@
 #include <sys/syscall.h>
 #include <sys/types.h>
 
-#define CLONE_SIGNAL (CLONE_SIGHAND | CLONE_THREAD)
-
 /* The mythread_detach() function.
    
  */
 int mythread_detach(mythread_t thread_ID)
 {
-    // mythread_private_t *target;
 
     kill(thread_ID.tid, SIGCONT);
 

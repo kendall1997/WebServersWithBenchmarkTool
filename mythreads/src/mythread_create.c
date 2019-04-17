@@ -96,24 +96,20 @@ int mythread_create(mythread_t *new_thread_ID,
     mythread_q_add(new_node);
 
     /* Call clone with pointer to wrapper function. TCB will be passed as arg to wrapper function. */
-    if ((tid = clone((void *)*start_func, (char *)child_stack, FLAGS, 0)) == -1)
+    if ((tid = clone((void *)*start_func, (char *)child_stack, /*FLAGS*/ SIGCHLD | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | CLONE_VM, 0)) == -1)
 
     {
+
         printf("clone failed! \n");
         printf("ERROR: %s \n", strerror(errno));
         return (-errno);
     }
-    // tid = waitpid(tid, 0, 0);
-    // if (tid == -1)
-    // {
-    //     perror("waitpid");
-    //     exit(3);
-    // }
 
     /* Save the tid returned by clone system call in the tcb. */
     new_thread_ID->tid = tid;
     new_node->tid = tid;
 
+    setbuf(stdout, NULL);
     printf("create: Finished initialising new thread: %ld\n", (unsigned long)new_thread_ID->tid);
 
     // tid = kill(tid, SIGSTOP);

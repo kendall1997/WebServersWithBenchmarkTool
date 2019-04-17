@@ -3,7 +3,14 @@
 /* We use a Queue Data structure for managing the tcb corresponding to each thread created. 
    The queue is implemented using a double ended linked list.
  */
+#define _GNU_SOURCE
 #include <mythread.h>
+#include <malloc.h>
+#include <sys/types.h>
+#include <sys/syscall.h>
+#include <pthread.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 /* The global extern pointer defined in mythread.h which points to the head node in
    Queue of the Thread Control Blocks.
@@ -105,4 +112,47 @@ mythread_private_t *mythread_q_search(unsigned long new_tid)
         } while (p != mythread_q_head);
     }
     return NULL;
+}
+
+void mythread_q_lock(unsigned long new_tid)
+{
+    mythread_private_t *p;
+
+    if (mythread_q_head != NULL)
+    {
+
+        p = mythread_q_head;
+
+        do
+        {
+            if (p->tid != new_tid)
+            {
+                printf("BLOCKING T %d \n\n", p->tid);
+                kill(p->tid, SIGSTOP);
+            }
+            p = p->next;
+        } while (p != mythread_q_head);
+    }
+}
+
+void mythread_q_unlock(unsigned long new_tid)
+{
+
+    mythread_private_t *p;
+
+    if (mythread_q_head != NULL)
+    {
+
+        p = mythread_q_head;
+
+        do
+        {
+            if (p->tid != new_tid)
+            {
+                printf("UNBLOCKING T %d \n\n", p->tid);
+                kill(p->tid, SIGCONT);
+            }
+            p = p->next;
+        } while (p != mythread_q_head);
+    }
 }
