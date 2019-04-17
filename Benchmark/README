@@ -1,17 +1,13 @@
-Para compilar
+To compile
 
 $ make
 
-Para ejecución de prueba
-
-$ make run
-
-Ejecución manual
+Manual Execution
 
 $ ./Benchmark autogestion.metrotel.com.ar 80 speedtest/archivo10MB.zip 2 2
 
-Esto ejecutará el benchmark sobre el host mostrado, puerto dado y el URI solicitado, con 2 threads y con 2 ciclos por thread.
+This will run the benchmark with the host, port and uri given, with 2 threads and with 2 cycles.
 
-La salida será en la salida entándar de la terminal, para guardarlo en un archivo csv, ejecute:
+The output will be in the terminal's standard output, to store the result in a file in disk, run:
 
 $ ./Benchmark autogestion.metrotel.com.ar 80 speedtest/archivo10MB.zip 2 2 > data.csv

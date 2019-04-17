@@ -12,12 +12,19 @@ CFLAGS=-O2 -lpthread -lcurl
 
 BIN_DIR=bin
 HEADER=include
+BENCH_DIR=benchmarks
 
 
 C_FILES=$(wildcard src/*.c)
 
-main: dir build
+.PHONY: clean main benchmarks
+
+main: dir build benchmarks
 	@echo "Building binaries"
+
+benchmarks:
+	@echo "Adding benchmark bash files"
+	@cp -a $(BENCH_DIR)/. $(BIN_DIR)/
 
 build:
 	@$(CC) -I"$(HEADER)" -o "$(BIN_DIR)/$(BIN_NAME)" $(C_FILES) $(CFLAGS)
@@ -27,9 +34,6 @@ curl:
 
 dir:
 	mkdir -p $(BIN_DIR)
-
-run:
-	./$(BIN_DIR)/$(BIN_NAME) autogestion.metrotel.com.ar 80 speedtest/archivo10MB.zip 2 2
 
 clean:
 	rm $(BIN_DIR) -rf
