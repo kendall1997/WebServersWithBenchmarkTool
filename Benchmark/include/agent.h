@@ -8,6 +8,7 @@ struct summary {
   char* TypeOfFile;
   char* name;
   double size;
+  double speedmed;
   time_t DateStart;
   time_t DateEnd;
   int ResponseTime;
