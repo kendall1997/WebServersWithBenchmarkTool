@@ -18,7 +18,9 @@ static int total_cycles;
 static int current_runs;
 static char* url_requested;
 static struct summary* results;
-
+static double aver_response;
+static double aver_data;
+static double aver_initial;
 
 
 
@@ -44,7 +46,7 @@ int main(int argc, char const *argv[]){
 
   printf("Remote resource to be downloaded for benchmarking, %s\n", url);
 
-  printf("Threads, Run, Iteration, DateTimeStart, DateTimeEnd, Time Elapsed, File Size, Data Transfer Speed, File Name, Type of File\n");
+  printf("Amount of Request, Threads, Run, Iteration, DateTimeStart, DateTimeEnd, Response Time, File Size, Data Transfer Speed, Initial Request Time, File Name, Kind File\n");
 
 
   work(url, threads, cycles);
@@ -96,10 +98,17 @@ void* task(void* args){
 
   char* url = (char*) args;
   int iteration;
+  aver_response = 0;
+  aver_data = 0;
+  aver_initial = 0;
+
   for(iteration = 0; iteration < total_cycles; ++iteration){
     // Main job
     struct summary* run = pull(url_requested);
-
+    
+    aver_response = ((aver_response + run->ResponseTime) / (current_runs + 1));
+    aver_data = ((aver_data + run->speedmed) / (current_runs + 1));
+    aver_initial = ((aver_initial + run->ini_request) / (current_runs + 1));
     char tmp1[50];
     char tmp2[50];
 
@@ -109,7 +118,7 @@ void* task(void* args){
     tmp1[strlen(tmp1)-1] = 0;
     tmp2[strlen(tmp2)-1] = 0;
 
-    printf("%d, %d, %d, %s, %s, %d, %.2f MB, %.2f Kb/s, %s, %s\n", total_threads, current_runs + 1 , iteration, tmp1, tmp2, run->ResponseTime, run->size, run->speedmed, run->name, run->TypeOfFile);
+    printf("%d, %d, %d, %d, %s, %s, %d, %.2f MB, %.3f MB/s, %.2f s, %s, %s\n", current_runs + 1, total_threads, current_runs + 1 , iteration + 1, tmp1, tmp2, run->ResponseTime, run->size, run->speedmed, run->ini_request, run->name, run->TypeOfFile);
 
     // Lock for store result
     pthread_mutex_lock(&lock);
@@ -123,6 +132,8 @@ void* task(void* args){
   }
 
   if(current_runs == total_runs){
+    printf("Average Initial request time, Average Response Time, Average Data Transfer Speed\n");
+    printf("%.2f s, %.2f s, %.3f MB/s", aver_initial, aver_response, aver_data);
     exit(EXIT_SUCCESS);
   }
 

@@ -28,6 +28,7 @@ struct summary* pull(char* url){
   double seconds;
   double size;
   double speedmed;
+  double ini_request;
 
   char *filename = (char*) (strrchr(url, '/') + 1);
   char* ext = (char*) (strrchr(url, '.') + 1);
@@ -61,6 +62,8 @@ struct summary* pull(char* url){
 
     curl_easy_getinfo(curl, CURLINFO_SPEED_DOWNLOAD, &speedmed);
 
+    curl_easy_getinfo(curl, CURLINFO_CONNECT_TIME, &ini_request);
+
     /* always cleanup */ 
     curl_easy_cleanup(curl);
  
@@ -80,13 +83,14 @@ struct summary* pull(char* url){
 
   seconds = (end - start);
   size = size/(1000*1000);
-  speedmed = speedmed/(1000);
+  speedmed = speedmed/(1000*1000);
   
   struct summary* tmp = malloc(sizeof(struct summary));
 
   tmp->ResponseTime = (int) seconds;
   tmp->size = size;
   tmp->speedmed = speedmed;
+  tmp->ini_request = ini_request;
   tmp->DateEnd = end;
   tmp->DateStart = start;
   tmp->name = filename;
