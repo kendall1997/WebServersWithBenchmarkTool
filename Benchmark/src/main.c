@@ -106,9 +106,9 @@ void* task(void* args){
     // Main job
     struct summary* run = pull(url_requested);
     
-    aver_response = ((aver_response + run->ResponseTime) / (current_runs + 1));
-    aver_data = ((aver_data + run->speedmed) / (current_runs + 1));
-    aver_initial = ((aver_initial + run->ini_request) / (current_runs + 1));
+    aver_response = (aver_response + run->ResponseTime);
+    aver_data = (aver_data + run->speedmed);
+    aver_initial = (aver_initial + run->ini_request);
     char tmp1[50];
     char tmp2[50];
 
@@ -132,6 +132,9 @@ void* task(void* args){
   }
 
   if(current_runs == total_runs){
+    aver_data = aver_data / (current_runs + 1);
+    aver_initial = aver_initial / (current_runs + 1);
+    aver_response = aver_response / (current_runs + 1);
     printf("Average Initial request time, Average Response Time, Average Data Transfer Speed\n");
     printf("%.2f s, %.2f s, %.3f MB/s", aver_initial, aver_response, aver_data);
     exit(EXIT_SUCCESS);
