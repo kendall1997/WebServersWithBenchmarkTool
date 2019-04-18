@@ -9,6 +9,7 @@ struct summary {
   char* name;
   double size;
   double speedmed;
+  double ini_request;
   time_t DateStart;
   time_t DateEnd;
   int ResponseTime;
