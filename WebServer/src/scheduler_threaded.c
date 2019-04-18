@@ -16,7 +16,7 @@
 #include <http.h>
 
 /**
- * @brief      This algorithm handles the incoming request in a parallel way (forked process)
+ * @brief      This algorithm handles the incoming request in a parallel way (threads)
  *
  * @param[in]  slot      The slot
  * @param      requests  The requests

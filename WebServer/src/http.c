@@ -1,3 +1,4 @@
+
 // Costa Rica Institute of Technology
 // Computer Engineering
 // Operating Systems
@@ -239,7 +240,7 @@ void respond(int n){
 
       // default path
       if(strcmp(uri, "") == 0){
-        uri = "index.php";
+        uri = "index.html";
       }
 
       // create full path from base directory
@@ -298,7 +299,6 @@ void respond(int n){
 
           // Added support to php
           if (strcmp(ext,"php") == 0 || strcmp(ext,"php1") == 0) {
-            printf("Inside PHP\n");
             // buffers
             char* command = calloc(300, sizeof(char));
             // compose paths

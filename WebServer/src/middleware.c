@@ -16,6 +16,7 @@
 #include <scheduler_fifo.h>
 #include <scheduler_forked.h>
 #include <scheduler_threaded.h>
+#include <scheduler_prethreaded.h>
 
 void startScheduler(struct config inheritedEnvironment){
   // Storing environment
@@ -28,6 +29,12 @@ void startScheduler(struct config inheritedEnvironment){
   // Save to log the scheduling algorithm to use
   log4us("Scheduling algorithm selected: ");
   log4us(inheritedEnvironment.scheduler);
+
+  // Set pool value
+  log4us("Pool value: ");
+  char poolValue[255];
+  sprintf(poolValue,"%d",environment.pool);
+  log4us(poolValue);
   
   // start the webserver
   log4us("HTTP Server started");
@@ -56,6 +63,10 @@ void scheduler(int slot){
   }else if(strcmp(SCHEDULER,"THREADED") == 0){ // Handler for THREADED algorithm
 
     scheduler_threaded(slot, requests);
+
+  }else if(strcmp(SCHEDULER,"PRETHREADED") == 0){ // Handler for PRETHREADED algorithm
+
+    scheduler_prethreaded(slot, requests, environment.pool);
 
   }else{ // Default is going to be FIFO
 

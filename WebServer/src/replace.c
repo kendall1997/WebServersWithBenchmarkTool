@@ -15,7 +15,6 @@
 char *replaceWord(const char *s, const char *oldW, 
                                  const char *newW) 
 { 
-    printf("URL: %s\n", s);
     char *result; 
     int i, cnt = 0; 
     int newWlen = strlen(newW); 

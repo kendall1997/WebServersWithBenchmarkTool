@@ -16,6 +16,7 @@ struct config
    char log[MAXBUF];
    char folder[MAXBUF];
    char scheduler[MAXBUF];
+   int pool;
 };
 
 struct config get_config(char const *filename);
