@@ -106,9 +106,9 @@ void* task(void* args){
     // Main job
     struct summary* run = pull(url_requested);
     
-    aver_response = (aver_response + run->ResponseTime);
-    aver_data = (aver_data + run->speedmed);
-    aver_initial = (aver_initial + run->ini_request);
+    aver_response += run->ResponseTime;
+    aver_data += run->speedmed;
+    aver_initial +=  run->ini_request;
     char tmp1[50];
     char tmp2[50];
 
@@ -118,7 +118,7 @@ void* task(void* args){
     tmp1[strlen(tmp1)-1] = 0;
     tmp2[strlen(tmp2)-1] = 0;
 
-    printf("%d, %d, %d, %d, %s, %s, %d, %.2f MB, %.3f MB/s, %.2f s, %s, %s\n", current_runs + 1, total_threads, current_runs + 1 , iteration + 1, tmp1, tmp2, run->ResponseTime, run->size, run->speedmed, run->ini_request, run->name, run->TypeOfFile);
+    printf("%d, %d, %d, %d, %s, %s, %d, %.2f MB, %.3f MB/s, %.3f ms, %s, %s\n", current_runs + 1, total_threads, current_runs + 1 , iteration + 1, tmp1, tmp2, run->ResponseTime, run->size, run->speedmed, (run->ini_request)*1000, run->name, run->TypeOfFile);
 
     // Lock for store result
     pthread_mutex_lock(&lock);
@@ -132,11 +132,11 @@ void* task(void* args){
   }
 
   if(current_runs == total_runs){
-    aver_data = aver_data / (current_runs + 1);
-    aver_initial = (aver_initial / (current_runs + 1))*1000;
-    aver_response = aver_response / (current_runs + 1);
+    aver_data = (aver_data / total_threads);
+    aver_initial = (aver_initial / total_threads)*1000;
+    aver_response = aver_response / total_threads;
     printf("Average Initial request time, Average Response Time, Average Data Transfer Speed\n");
-    printf("%.2f s, %.2f s, %.3f MB/s", aver_initial, aver_response, aver_data);
+    printf("%.3f ms, %.3f s, %.3f MB/s", aver_initial, aver_response, aver_data);
     exit(EXIT_SUCCESS);
   }
 
