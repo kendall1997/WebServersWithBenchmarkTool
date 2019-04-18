@@ -20,6 +20,7 @@
 #include <http.h>
 #include <middleware.h>
 #include <mime.h>
+#include <replace.h>
 #include <log4us.h>
 
 /**
@@ -225,12 +226,20 @@ void respond(int n){
       payload_size = t2 ? atol(t2) : (rcvd-(t-buf));
 
 
+      ///// Bug fixed from Docker ///////
+      /*
+        Adds a 1 at the end of php url
+      */
+
+      uri = replaceWord(uri, "php1", "php");
+
+
       // delete / from path
       if (uri[0] == '/') uri++;
 
       // default path
       if(strcmp(uri, "") == 0){
-        uri = "index.html";
+        uri = "index.php";
       }
 
       // create full path from base directory
@@ -288,7 +297,8 @@ void respond(int n){
           send(clientfd, ct, strlen(ct), 0);
 
           // Added support to php
-          if (strcmp(ext,"php") == 0) {
+          if (strcmp(ext,"php") == 0 || strcmp(ext,"php1") == 0) {
+            printf("Inside PHP\n");
             // buffers
             char* command = calloc(300, sizeof(char));
             // compose paths

@@ -29,9 +29,6 @@ benchmarks:
 build:
 	@$(CC) -I"$(HEADER)" -o "$(BIN_DIR)/$(BIN_NAME)" $(C_FILES) $(CFLAGS)
 
-curl:
-	sudo apt-get install libcurl4-gnutls-dev
-
 dir:
 	mkdir -p $(BIN_DIR)
 
