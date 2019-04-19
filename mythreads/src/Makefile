@@ -6,8 +6,8 @@
 # 	ajalgao	 Aditya A Jalgaonkar
 #
 
-SRCS =   mythread_q.c mythread_create.c mythread_exit.c  mythread_exit.c mythread_join.c mythread_detach.c mymutex.c
-INC = mythread.h  mythread_q.h mymutex.h
+SRCS =   mythread_q.c mythread_create.c mythread_exit.c  mythread_exit.c mythread_join.c mythread_detach.c mymutex.c myscheduler.c 
+INC = mythread.h  mythread_q.h mymutex.h myscheduler.h
 OBJS = $(SRCS:.c=.o)
 TEST_SRCS = mythread_test.c
 TEST_OBJS = $(TEST_SRCS:.c=.o)
@@ -51,3 +51,9 @@ pthread:
 
 pthread_clean:
 	rm pthread
+
+timer:
+	$(CC) timer.c -o timer
+
+timer_clean:
+	rm timer

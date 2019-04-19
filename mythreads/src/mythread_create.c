@@ -97,7 +97,6 @@ int mythread_create(mythread_t *new_thread_ID,
 
     /* Call clone with pointer to wrapper function. TCB will be passed as arg to wrapper function. */
     if ((tid = clone((void *)*start_func, (char *)child_stack, /*FLAGS*/ SIGCHLD | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | CLONE_VM, 0)) == -1)
-
     {
 
         printf("clone failed! \n");

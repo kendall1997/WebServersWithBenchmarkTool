@@ -10,8 +10,15 @@
  * just collect the return status. Else, wait for the thread to die and then
  * collect the return status
  */
+
+int *scheduler_type;
 int mythread_join(mythread_t target_thread, void **status)
 {
+    //printf("SCHEDULER %d\n\n", scheduler_type);
+    if (scheduler_type == FIFO || scheduler_type == LOTTERY)
+    {
+        kill(target_thread.tid, SIGCONT);
+    }
 
     mythread_private_t *target, *self_ptr;
 
@@ -40,6 +47,9 @@ int mythread_join(mythread_t target_thread, void **status)
     //setbuf(stdout, NULL);
     printf("Child thread %d returned and stack freed.\n", target->tid);
 
-    *status = target->returnValue;
+    //*status = target->returnValue;
+
+    target->state = DEFUNCT;
+
     return 0;
 }

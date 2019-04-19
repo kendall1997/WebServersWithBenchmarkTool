@@ -18,6 +18,11 @@
 #define BLOCKED 2 /* Waiting on Join */
 #define DEFUNCT 3 /* Dead */
 
+#define FIFO 0
+#define SSROUNDROBIN 1
+#define LOTTERY 2
+#define REAL 3
+
 typedef struct mythread_attr
 {
     unsigned long stackSize; /* Stack size to be used by this thread. Default is SIGSTKSZ */
@@ -42,6 +47,8 @@ typedef struct mythread_private
     struct mythread_private *prev, *next;
 
 } mythread_private_t;
+
+extern int *scheduler_type;
 
 extern mythread_private_t *mythread_q_head; /* The pointer pointing to head node of the TCB queue */
 
@@ -71,6 +78,8 @@ int mythread_detach(mythread_t thread_ID);
  * from thread_func and dequeue itself from run Q before dispatching run->next
  */
 void mythread_exit(void *retval);
+
+void mythread_sched(char *scheduler);
 
 /* Private functions */
 

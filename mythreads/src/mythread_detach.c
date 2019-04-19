@@ -30,5 +30,6 @@ int mythread_detach(mythread_t thread_ID)
 
     kill(thread_ID.tid, SIGCONT);
 
+    printf("detach: Thread %d detached\n", thread_ID.tid);
     return 0;
 }
