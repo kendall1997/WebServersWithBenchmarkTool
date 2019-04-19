@@ -1,5 +1,4 @@
 #define _GNU_SOURCE
-
 #include <mythread.h>
 #include <mythread_q.h>
 #include <sys/syscall.h>
@@ -14,7 +13,6 @@
 int *scheduler_type;
 int mythread_join(mythread_t target_thread, void **status)
 {
-    //printf("SCHEDULER %d\n\n", scheduler_type);
     if (scheduler_type == FIFO || scheduler_type == LOTTERY)
     {
         kill(target_thread.tid, SIGCONT);

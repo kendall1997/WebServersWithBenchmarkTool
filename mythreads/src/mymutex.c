@@ -7,13 +7,19 @@
 #include <sys/syscall.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
+/**
+ * Function for initialization of the
+ * mutex
+ * */
 int mythread_mymutex_init(mythread_mymutex_t *mutex, void *attr)
 {
     mutex->state = INIT;
     return 0;
 }
 
+/**
+ * Function for lock the other threads
+ * */
 int mythread_mymutex_lock(mythread_mymutex_t *mutex)
 {
     if (mutex->state == INIT)
@@ -34,6 +40,10 @@ int mythread_mymutex_lock(mythread_mymutex_t *mutex)
 
     return 0;
 }
+
+/**
+ * Function for unlock all the other threads
+ * */
 int mythread_mymutex_unlock(mythread_mymutex_t *mutex)
 {
     if (mutex->state == LOCK)
@@ -52,6 +62,7 @@ int mythread_mymutex_unlock(mythread_mymutex_t *mutex)
 
     return 0;
 }
+
 int mythread_mymutex_trylock(mythread_mymutex_t *mutex)
 {
 

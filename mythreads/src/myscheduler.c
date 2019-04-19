@@ -17,6 +17,11 @@
 
 int *scheduler_type;
 
+/**
+ * Function that receives the type of scheduler we
+ * are going to realize
+ * */
+
 void mythread_sched(char *scheduler)
 {
 
@@ -46,51 +51,41 @@ void mythread_sched(char *scheduler)
     }
 }
 
+/**
+ * Function for setup and realize the scheduler 
+ * of fifo
+ * */
+
 void mythread_fifo()
 {
     mythread_q_lock_all();
     mythread_q_unlock_fifo();
 }
+/**
+ * Function for setup and realize the scheduler 
+ * of ssroundrobin
+ * */
 
 void mythread_ssroundrobin()
 {
     mythread_q_lock_all();
 }
+/**
+ * Function for setup and realize the scheduler 
+ * of lottery
+ * */
 
 void mythread_lottery()
 {
 
     mythread_q_lock_all();
-    int number_threads = mythread_q_count();
-    int array[number_threads][5];
-
-    int number_max = number_threads * 5;
-
-    int full = 0;
-
-    int rand_number;
-
-    mythread_q_array_fill(array, 3, 5);
-    //mythread_q_print_array(array, number_threads, 5);
-
-    while (full != 1)
-    {
-        rand_number = rand() % ((number_threads * 5));
-        //printf("RANDOM: %d\n", rand_number);
-        if (!mythread_q_array_verify(array, number_threads, 5, rand_number))
-        {
-
-            mythread_q_array_append(array, number_threads, 5, rand_number);
-            //mythread_q_print_array(array, number_threads, 5);
-        }
-        full = mythread_q_array_isfull(array, number_threads, 5);
-    }
-    //mythread_q_print_array(array, number_threads, 5);
-    int tickets[number_threads];
-    mythread_q_choose_tickets(array, number_threads, 5, tickets);
-
-    mythread_q_unlock_lottery(tickets, number_threads);
+    mythread_q_lottery();
 }
+
+/**
+ * Function for setup and realize the scheduler 
+ * of realtime
+ * */
 
 void mythread_real()
 {

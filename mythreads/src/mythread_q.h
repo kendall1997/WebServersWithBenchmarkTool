@@ -24,3 +24,4 @@ extern void mythread_q_array_simple_fill(void *_array, int size);
 extern void mythread_q_array_simple_append(void *_array, int size, int number);
 extern void mythread_q_print_array_simple(void *_array, int size);
 extern void mythread_q_choose_tickets(void *_array, int size_row, int size_columns, void *_tickets);
+extern void mythread_q_lottery();

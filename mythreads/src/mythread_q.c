@@ -1,5 +1,3 @@
-
-
 #define _GNU_SOURCE
 #include <mythread.h>
 #include <malloc.h>
@@ -34,11 +32,11 @@ void mythread_q_add(mythread_private_t *node)
 
     if (mythread_q_head == NULL)
     {
-        //Q is not initiazed yet. Create it.
+
         mythread_q_init(node);
         return;
     }
-    //Insert the node at the end of Q
+
     node->next = mythread_q_head;
     node->prev = mythread_q_head->prev;
     mythread_q_head->prev->next = node;
@@ -55,7 +53,6 @@ void mythread_q_delete(mythread_private_t *node)
     mythread_private_t *p;
     if (node == mythread_q_head && node->next == mythread_q_head)
     {
-        //There is only a single node and it is being deleted
         printf("The Q is now Empty!\n");
         mythread_q_head = NULL;
     }
@@ -80,12 +77,11 @@ void mythread_q_state_display()
     if (mythread_q_head != NULL)
     {
 
-        //display the Q - for debug purposes
         printf("\n The Q contents are -> \n");
         mythread_private_t *p;
         p = mythread_q_head;
         do
-        { //traverse to the last node in Q
+        {
             printf(" %d\n", p->state);
             p = p->next;
         } while (p != mythread_q_head);
@@ -103,7 +99,7 @@ mythread_private_t *mythread_q_search(unsigned long new_tid)
 
         p = mythread_q_head;
         do
-        { //traverse to the last node in Q
+        {
             if (p->tid == new_tid)
                 return p;
             p = p->next;
@@ -177,7 +173,7 @@ void mythread_q_lock_all()
     {
 
         p = mythread_q_head;
-        //printf("SCHEDULER %ls\n\n", scheduler_type);
+
         do
         {
             kill(p->tid, SIGSTOP);
@@ -200,7 +196,7 @@ void mythread_q_unlock_fifo()
     {
 
         p = mythread_q_head;
-        //printf("SCHEDULER %ls\n\n", scheduler_type);
+
         int flag = FALSE;
         do
         {
@@ -215,6 +211,11 @@ void mythread_q_unlock_fifo()
     }
 }
 
+/**
+ * Function that makes all the threads
+ * of the lottery scheduler run
+ * */
+
 void mythread_q_unlock_lottery(void *_array, int size)
 {
     mythread_private_t *p;
@@ -225,31 +226,27 @@ void mythread_q_unlock_lottery(void *_array, int size)
     {
 
         p = mythread_q_head;
-        //printf("SCHEDULER %ls\n\n", scheduler_type);
+
         int flag = FALSE;
         do
         {
 
             if (p == mythread_q_head)
             {
-                //printf("H\n");
+
                 i = 0;
             }
-            //printf("I %d\n", i);
+
             if (array[number] == i)
             {
-                //printf("ARRAY %d\n", array[number]);
-                //printf("NUMBER %d\n", number);
                 mythread_t t;
                 t.tid = p->tid;
                 printf("UNBLOCKING %d\n", t.tid);
 
-                //kill(t.tid, SIGCONT);
                 number++;
                 mythread_join(t, NULL);
             }
 
-            //printf("NUMBER %d\n", number);
             p = p->next;
             i++;
 
@@ -271,13 +268,18 @@ int mythread_q_count()
 
         p = mythread_q_head;
         do
-        { //traverse to the last node in Q
+        {
             count++;
             p = p->next;
         } while (p != mythread_q_head);
     }
     return count;
 }
+
+/**
+ * This function verify if the array has the number
+ * rand
+ * */
 
 int mythread_q_array_verify(void *_array, int size_row, int size_columns, int rand)
 {
@@ -286,7 +288,7 @@ int mythread_q_array_verify(void *_array, int size_row, int size_columns, int ra
     {
         for (int j = 0; j < size_columns; j++)
         {
-            // printf("VERIFY\n");
+
             if (array[i][j] == rand)
             {
                 return 1;
@@ -296,6 +298,11 @@ int mythread_q_array_verify(void *_array, int size_row, int size_columns, int ra
 
     return 0;
 }
+
+/**
+ * This function fills an array 
+ * with -1 in all positions
+ * */
 
 void mythread_q_array_fill(void *_array, int size_row, int size_columns)
 {
@@ -309,6 +316,11 @@ void mythread_q_array_fill(void *_array, int size_row, int size_columns)
     }
 }
 
+/**
+ * This function verify if the array is 
+ * full
+ * */
+
 int mythread_q_array_isfull(void *_array, int size_row, int size_columns)
 {
     int(*array)[size_columns] = _array;
@@ -316,7 +328,7 @@ int mythread_q_array_isfull(void *_array, int size_row, int size_columns)
     {
         for (int j = 0; j < size_columns; j++)
         {
-            //printf("ISFULL\n");
+
             if (array[i][j] == -1)
             {
                 return 0;
@@ -326,6 +338,10 @@ int mythread_q_array_isfull(void *_array, int size_row, int size_columns)
 
     return 1;
 }
+
+/**
+ * This function prints an array
+ * */
 
 void mythread_q_print_array(void *_array, int size_row, int size_columns)
 {
@@ -354,6 +370,11 @@ void mythread_q_print_array(void *_array, int size_row, int size_columns)
     printf("]\n");
 }
 
+/**
+ * This function appends only 1 number
+ * in an array
+ * */
+
 void mythread_q_array_append(void *_array, int size_row, int size_columns, int number)
 {
     int(*array)[size_columns] = _array;
@@ -362,7 +383,7 @@ void mythread_q_array_append(void *_array, int size_row, int size_columns, int n
     {
         for (int j = 0; j < size_columns; j++)
         {
-            //printf("APPEND");
+
             if (array[i][j] == -1 && append == FALSE)
             {
                 array[i][j] = number;
@@ -446,6 +467,10 @@ void mythread_q_print_array_simple(void *_array, int size)
     printf("]\n");
 }
 
+/**
+ * This function gives the tickets to shcedulers
+ * */
+
 void mythread_q_choose_tickets(void *_array, int size_row, int size_columns, void *_tickets)
 {
     int(*array)[size_columns] = _array;
@@ -459,16 +484,16 @@ void mythread_q_choose_tickets(void *_array, int size_row, int size_columns, voi
     while (full != 1)
     {
         random = rand() % (size_row * 5);
-        // printf("RANDOM %d\n", random);
+
         for (int i = 0; i < size_row; i++)
         {
             for (int j = 0; j < size_columns; j++)
             {
-                // printf("NUMBER OF ARRAY %d \n", array[i][j]);
+
                 if (array[i][j] == random)
                 {
                     flag = !mythread_q_array_simple_verify(tickets, size_row, i);
-                    // printf("FLAG %d\n", flag);
+
                     if (flag == 1)
                     {
                         mythread_q_array_simple_append(tickets, size_row, i);
@@ -479,7 +504,41 @@ void mythread_q_choose_tickets(void *_array, int size_row, int size_columns, voi
             }
         }
         full = mythread_q_array_simple_isfull(tickets, size_row);
-        // printf("FULL %d\n", full);
     }
-    //mythread_q_print_array_simple(tickets, size_row);
+}
+
+/**
+ * This function have all the logic of 
+ * the lottery scheduler
+ * */
+
+void mythread_q_lottery()
+{
+    int number_threads = mythread_q_count();
+    int array[number_threads][5];
+
+    int number_max = number_threads * 5;
+
+    int full = 0;
+
+    int rand_number;
+
+    mythread_q_array_fill(array, 3, 5);
+
+    while (full != 1)
+    {
+        rand_number = rand() % ((number_threads * 5));
+
+        if (!mythread_q_array_verify(array, number_threads, 5, rand_number))
+        {
+
+            mythread_q_array_append(array, number_threads, 5, rand_number);
+        }
+        full = mythread_q_array_isfull(array, number_threads, 5);
+    }
+
+    int tickets[number_threads];
+    mythread_q_choose_tickets(array, number_threads, 5, tickets);
+
+    mythread_q_unlock_lottery(tickets, number_threads);
 }
