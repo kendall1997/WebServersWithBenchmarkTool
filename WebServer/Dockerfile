@@ -14,7 +14,7 @@ RUN find /etc/systemd/system \
 
 RUN apt-get update && \
     apt-get install -y \
-    dbus build-essential sudo curl && \
+    dbus build-essential sudo curl php libapache2-mod-php && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

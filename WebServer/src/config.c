@@ -21,6 +21,8 @@ struct config get_config(char const *filename){
   struct config configstruct;
   FILE *file = fopen (filename, "r");
 
+  char pool_buffer[MAXBUF];
+
   if (file != NULL){ 
     char line[MAXBUF];
     int i = 0;
@@ -55,11 +57,18 @@ struct config get_config(char const *filename){
         //configstruct.folder[strlen(cfline)-1] = NULL;
         configstruct.scheduler[strcspn(configstruct.scheduler, "\n")] = '\0';
         //printf("%s\n",configstruct.folder);
+      } else if (i == 4){
+        memcpy(pool_buffer,cfline,strlen(cfline));
+        //configstruct.folder[strlen(cfline)-1] = NULL;
+        pool_buffer[strcspn(pool_buffer, "\n")] = '\0';
+        //printf("%s\n",configstruct.folder);
       }
       i++;
     } // End while
     fclose(file);
   } // End if file
+
+  configstruct.pool = atoi(pool_buffer);
   
   return configstruct;
 }

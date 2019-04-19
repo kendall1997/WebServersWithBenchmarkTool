@@ -9,6 +9,8 @@ BINARY=WebServer
 CONTAINER_INSTANCE_FIFO=WebServerFIFO
 CONTAINER_INSTANCE_FORKED=WebServerFORKED
 CONTAINER_INSTANCE_THREADED=WebServerTHREADED
+CONTAINER_INSTANCE_PREFORKED=WebServerPREFORKED
+CONTAINER_INSTANCE_PRETHREADED=WebServerPRETHREADED
 
 LIB_PATH=lib
 SRC_PATH=src
@@ -168,6 +170,36 @@ threaded-remove:
 
 threaded-terminal:
 	@sudo docker exec -it $(CONTAINER_INSTANCE_THREADED) /bin/bash
+
+preforked-create:
+	@cd DockerScripts/PREFORKED && ./create.sh
+
+preforked-start:
+	@cd DockerScripts/PREFORKED && ./start.sh
+
+preforked-stop:
+	@cd DockerScripts/PREFORKED && ./stop.sh
+
+preforked-remove:
+	@cd DockerScripts/PREFORKED && ./remove.sh
+
+preforked-terminal:
+	@sudo docker exec -it $(CONTAINER_INSTANCE_PREFORKED) /bin/bash
+
+prethreaded-create:
+	@cd DockerScripts/PRETHREADED && ./create.sh
+
+prethreaded-start:
+	@cd DockerScripts/PRETHREADED && ./start.sh
+
+prethreaded-stop:
+	@cd DockerScripts/PRETHREADED && ./stop.sh
+
+prethreaded-remove:
+	@cd DockerScripts/PRETHREADED && ./remove.sh
+
+prethreaded-terminal:
+	@sudo docker exec -it $(CONTAINER_INSTANCE_PRETHREADED) /bin/bash
 
 list:
 	@sudo docker container ls

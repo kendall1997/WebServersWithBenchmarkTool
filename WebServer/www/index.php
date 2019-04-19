@@ -45,7 +45,8 @@
     <div>
       <b>Costa Rica Institute of Technology <br>
       Computer Engineering <br><br></b>
-      Introduction to Operative Systems
+      Introduction to Operative Systems<br>
+      <?php echo (date('m/d/Y h:i:s a', time())); ?>
     </div>
   </header>
   <section>

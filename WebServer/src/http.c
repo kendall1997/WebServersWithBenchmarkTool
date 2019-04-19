@@ -1,3 +1,4 @@
+
 // Costa Rica Institute of Technology
 // Computer Engineering
 // Operating Systems
@@ -20,6 +21,7 @@
 #include <http.h>
 #include <middleware.h>
 #include <mime.h>
+#include <replace.h>
 #include <log4us.h>
 
 /**
@@ -225,6 +227,14 @@ void respond(int n){
       payload_size = t2 ? atol(t2) : (rcvd-(t-buf));
 
 
+      ///// Bug fixed from Docker ///////
+      /*
+        Adds a 1 at the end of php url
+      */
+
+      uri = replaceWord(uri, "php1", "php");
+
+
       // delete / from path
       if (uri[0] == '/') uri++;
 
@@ -251,7 +261,10 @@ void respond(int n){
       // free message memory
       free(message);
 
-      // Open file requested
+      // get file extension
+      char* ext = (char*) (strrchr(uri, '.') + 1);
+
+      // Required structures to open the file in disk
       char* fs_name = path;
       char sdbuf[LENGTH]; 
       FILE *fs = fopen(fs_name, "r");
@@ -275,8 +288,6 @@ void respond(int n){
           char* ok = "HTTP/1.1 200 OK\r\n";
           char* ct = "";
 
-          // get file extension
-          char* ext = (char*) (strrchr(uri, '.') + 1);
 
           // set the content type based on the extension
           ct = getMimeType(ext);
@@ -286,18 +297,39 @@ void respond(int n){
           send(clientfd, ok, strlen(ok), 0);
           send(clientfd, ct, strlen(ct), 0);
 
-          // send data to user by spliting the requested file.
-          bzero(sdbuf, LENGTH); 
-          int fs_block_sz; 
-          while((fs_block_sz = fread(sdbuf, sizeof(char), LENGTH, fs))>0){
-            if(send(clientfd, sdbuf, fs_block_sz, 0) < 0){
-              printf("ERROR: Failed to send file %s.\n", fs_name);
-             break;
+          // Added support to php
+          if (strcmp(ext,"php") == 0 || strcmp(ext,"php1") == 0) {
+            // buffers
+            char* command = calloc(300, sizeof(char));
+            // compose paths
+            sprintf(command, "php %s", fs_name);
+            int size_retrieved;
+
+            fs = popen(command, "r");
+            while ((size_retrieved = fread(sdbuf,sizeof(char),LENGTH, fs)) >0){
+              if(send(clientfd, sdbuf, size_retrieved, 0) < 0){
+                printf("ERROR: Failed to send file %s.\n", fs_name);
+               break;
+              }
             }
-            bzero(sdbuf, LENGTH);
+            fclose(fs);
+
+
+            free(command);
+            
+          }else{
+            // send data to user by spliting the requested file.
+            bzero(sdbuf, LENGTH); 
+            int fs_block_sz; 
+            while((fs_block_sz = fread(sdbuf, sizeof(char), LENGTH, fs))>0){
+              if(send(clientfd, sdbuf, fs_block_sz, 0) < 0){
+                printf("ERROR: Failed to send file %s.\n", fs_name);
+               break;
+              }
+              bzero(sdbuf, LENGTH);
+            }
           }
 
-          
         }
 
         // Closing Socket

@@ -12,6 +12,8 @@ cd ../
 cp WebServer WebServerFIFO -r
 cp WebServer WebServerFORKED -r
 cp WebServer WebServerTHREADED -r
+cp WebServer WebServerPREFORKED -r
+cp WebServer WebServerPRETHREADED -r
 
 # Install docker & create each webserver
 
@@ -28,6 +30,13 @@ cd WebServerTHREADED
 make threaded-create
 cd ../
 
+cd WebServerPREFORKED
+make preforked-create
+cd ../
+
+cd WebServerPRETHREADED
+make prethreaded-create
+cd ../
 
 # Finish
 echo 'Process Done'
