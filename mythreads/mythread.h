@@ -60,9 +60,10 @@ extern mythread_private_t *mythread_q_head; /* The pointer pointing to head node
  */
 int mythread_create(mythread_t *new_thread_ID,
                     mythread_attr_t *attr,
-                    void *(*start_func)(void *),
+                    void *start_func,
                     void *arg);
 
+int create(mythread_t *new_thread_ID, mythread_attr_t *attr, void *start_func, void *arg);
 /*
  * mythread_join - suspend calling thread if target_thread has not finished,
  * enqueue on the join Q of the target thread, then dispatch ready thread;

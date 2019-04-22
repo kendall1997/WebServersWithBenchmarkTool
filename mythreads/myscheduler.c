@@ -58,7 +58,7 @@ void mythread_sched(char *scheduler)
 
 void mythread_fifo()
 {
-    mythread_q_lock_all();
+    // mythread_q_lock_all();
     mythread_q_unlock_fifo();
 }
 /**
@@ -68,7 +68,8 @@ void mythread_fifo()
 
 void mythread_ssroundrobin()
 {
-    mythread_q_lock_all();
+    // mythread_q_lock_all();
+    mythread_q_ssrr();
 }
 /**
  * Function for setup and realize the scheduler 
@@ -78,7 +79,7 @@ void mythread_ssroundrobin()
 void mythread_lottery()
 {
 
-    mythread_q_lock_all();
+    // mythread_q_lock_all();
     mythread_q_lottery();
 }
 

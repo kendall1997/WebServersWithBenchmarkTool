@@ -13,6 +13,8 @@
 int *scheduler_type;
 int mythread_join(mythread_t target_thread, void **status)
 {
+    kill(target_thread.tid, SIGCONT);
+
     if (scheduler_type == FIFO || scheduler_type == LOTTERY)
     {
         kill(target_thread.tid, SIGCONT);

@@ -31,10 +31,10 @@ void mythread_exit(void *value_ptr)
         thread->blockedForJoin->state = READY;
     }
 
-    free(thread->args);
+    // free(thread->args);
 
     // setbuf(stdout, NULL);
-    // printf("THREAD %d EXIT", thread->tid);
+    printf("THREAD %d EXIT", thread->tid);
 
     syscall(SYS_exit, 0);
 }

@@ -127,6 +127,7 @@ void mythread_q_lock(unsigned long new_tid)
             if (p->tid != new_tid)
             {
                 printf("BLOCKING T %d \n\n", p->tid);
+                p->state = BLOCKED;
                 kill(p->tid, SIGSTOP);
             }
             p = p->next;
@@ -154,6 +155,7 @@ void mythread_q_unlock(unsigned long new_tid)
             if (p->tid != new_tid)
             {
                 printf("UNBLOCKING T %d \n\n", p->tid);
+                p->state = READY;
                 kill(p->tid, SIGCONT);
             }
             p = p->next;
@@ -177,6 +179,7 @@ void mythread_q_lock_all()
         do
         {
             kill(p->tid, SIGSTOP);
+            p->state = BLOCKED;
             printf("STOPPING T %d \n\n", p->tid);
             p = p->next;
         } while (p != mythread_q_head);
@@ -531,14 +534,103 @@ void mythread_q_lottery()
 
         if (!mythread_q_array_verify(array, number_threads, 5, rand_number))
         {
-
             mythread_q_array_append(array, number_threads, 5, rand_number);
         }
         full = mythread_q_array_isfull(array, number_threads, 5);
     }
+    mythread_q_print_array_simple(array, number_threads);
 
     int tickets[number_threads];
     mythread_q_choose_tickets(array, number_threads, 5, tickets);
-
+    mythread_q_print_array_simple(array, number_threads);
     mythread_q_unlock_lottery(tickets, number_threads);
+}
+
+/**
+ * Function that fills an array with all pids created
+ * */
+void mythread_q_queue_fill_pid(void *_array, int size)
+{
+    mythread_private_t *p;
+    int i = 0;
+    int(*array) = _array;
+    if (mythread_q_head != NULL)
+    {
+
+        p = mythread_q_head;
+
+        do
+        {
+
+            array[i] = p->tid;
+
+            p = p->next;
+            i++;
+
+        } while ((i != size));
+    }
+}
+
+/**
+ * Function used for change the position
+ * of the data in array moving one position
+ * forward, like a circular shift
+ * */
+
+void mythread_q_swap_rr(void *_array, int size)
+{
+    int i = 0;
+    int(*array) = _array;
+
+    int temp_last = array[0];
+    int temp;
+    printf("%d\n", temp_last);
+    for (i; i < size; i++)
+    {
+        if (i == size - 1)
+        {
+            array[i] = temp_last;
+        }
+        else
+        {
+            array[i] = array[i + 1];
+        }
+    }
+}
+/**
+ * Function that has all the logic for 
+ * Selfish Round Robin algorithm
+ * */
+void mythread_q_ssrr()
+{
+    int number_threads = mythread_q_count();
+    int array_pids[number_threads];
+    mythread_q_queue_fill_pid(array_pids, number_threads);
+    mythread_q_print_array_simple(array_pids, number_threads);
+
+    int number = 0;
+    int i = 0;
+
+    mythread_private_t *p;
+
+    p = mythread_q_search(array_pids[number_threads - 1]);
+
+    printf("STATE: %d, PID: %d\n", p->state, p->tid);
+
+    while (p->state != DEFUNCT)
+    {
+        if (i == number_threads)
+        {
+            i = 0;
+        }
+
+        kill(array_pids[i], SIGCONT);
+
+        sleep(1);
+
+        kill(array_pids[i], SIGSTOP);
+
+        printf("STATE: %d, PID: %d\n", p->state, p->tid);
+        i++;
+    }
 }
