@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include <scheduler_fifo.h>
+#include <scheduler_forked.h>
 #include <http.h>
 
 /**

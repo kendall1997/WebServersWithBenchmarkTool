@@ -118,7 +118,7 @@ void* prethreaded_task(void* package){
       prethreaded_after_work(threadId);
 
     }else{
-      //printf("No work on thread %d\n", threadId);
+      printf("No work on thread %d\n", threadId);
     }
 
     int checkTimeDelay = 100;
@@ -140,7 +140,7 @@ void* prethreaded_task(void* package){
  */
 void prethreaded_work(int slot){
   respond(slot);
-  printf("Out of thread\n");
+  //printf("Out of thread\n");
 }
 
 
