@@ -132,7 +132,7 @@ void* task(void* args){
     aver_initial = (aver_initial / total_threads)*1000;
     aver_response = aver_response / total_threads;
     printf("Average Initial request time, Average Response Time, Average Data Transfer Speed\n");
-    printf("%.3f ms, %.3f s, %.3f MB/s", aver_initial, aver_response, aver_data);
+    printf("%.3f ms, %.3f s, %.3f MB/s\n", aver_initial, aver_response, aver_data);
     exit(EXIT_SUCCESS);
   }
 

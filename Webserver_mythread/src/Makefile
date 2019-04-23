@@ -6,7 +6,7 @@
 WD=$(shell pwd)
 
 CC=gcc
-CFLAGS=-O2 -lpthread
+CFLAGS=-O2 
 
 LIB_PATH=$(WD)/../lib
 HEADER=$(WD)/../include
