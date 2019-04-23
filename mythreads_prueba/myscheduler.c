@@ -90,5 +90,5 @@ void pthread_lottery()
 
 void pthread_real()
 {
-    pthread_q_lock_all();
+    pthread_q_unlock_fifo();
 }
