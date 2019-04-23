@@ -1,10 +1,4 @@
-# Single Author info:
-# 	jhshah 	 Jitesh H Shah
-# Group info:
-# 	jhshah	 Jitesh H Shah
-# 	sskanitk Salil S Kanitkar
-# 	ajalgao	 Aditya A Jalgaonkar
-#
+# Makefile for mypthread
 
 SRCS =   mythread_q.c mythread_create.c mythread_exit.c  mythread_exit.c mythread_join.c mythread_detach.c mymutex.c myscheduler.c 
 INC = mythread.h  mythread_q.h mymutex.h myscheduler.h
@@ -26,9 +20,14 @@ endif
 
 .PHONY: all lib clean tags test a5
 a5:  all
+
+# This function compiles every .c and .h
+
 all: lib test
 
 lib: $(LIB)
+
+# This make the librarie static
 
 libmythread.a: $(OBJS) $(INC)
 	$(AR) rcs $(LIB) $(OBJS)
