@@ -204,7 +204,7 @@ void pthread_q_unlock_fifo()
         {
             pthread_t t;
 
-            t.tid = p->tid;
+            t = p->tid;
 
             pthread_join(t, NULL);
 
@@ -243,8 +243,8 @@ void pthread_q_unlock_lottery(void *_array, int size)
             if (array[number] == i)
             {
                 pthread_t t;
-                t.tid = p->tid;
-                printf("UNBLOCKING %d\n", t.tid);
+                t = p->tid;
+                printf("UNBLOCKING %d\n", t);
 
                 number++;
                 pthread_join(t, NULL);

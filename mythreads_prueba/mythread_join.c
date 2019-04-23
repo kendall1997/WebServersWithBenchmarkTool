@@ -13,18 +13,18 @@
 int *scheduler_type;
 int pthread_join(pthread_t target_thread, void **status)
 {
-    kill(target_thread.tid, SIGCONT);
+    kill(target_thread, SIGCONT);
 
     if (scheduler_type == FIFO || scheduler_type == LOTTERY)
     {
-        kill(target_thread.tid, SIGCONT);
+        kill(target_thread, SIGCONT);
     }
 
     pthread_private_t *target, *self_ptr;
 
     pid_t t;
 
-    target = pthread_q_search(target_thread.tid);
+    target = pthread_q_search(target_thread);
 
     if (target->state == DEFUNCT)
     {

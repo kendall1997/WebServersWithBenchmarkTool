@@ -17,8 +17,8 @@ int pthread_detach(pthread_t thread_ID)
 {
     // pid_t t = syscall(SYS_gettid);
 
-    kill(thread_ID.tid, SIGCONT);
+    kill(thread_ID, SIGCONT);
 
-    printf("detach: Thread %ld detached\n", thread_ID.tid);
+    printf("detach: Thread %ld detached\n", thread_ID);
     return 0;
 }
