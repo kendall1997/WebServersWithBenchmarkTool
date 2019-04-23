@@ -17,7 +17,7 @@ The output will be in the terminal's standard output, to store the result in a f
 $ ./Benchmark autogestion.metrotel.com.ar 80 speedtest/archivo10MB.zip 2 2 > data.csv
 
 
-Also, can execute the benchmark suite directly: 
+Also, can execute the benchmark suite directly inside bin folder after compile: 
 	./Benchmark_image.sh
 	./Benchmark_iso.sh
 	./Benchmark_multimedia.sh
