@@ -9,8 +9,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-/* See whether anyone is blocking on us for a join. If yes, mark that thread as READY
- * and kill ourselves
+/**
+ * This function indicates when a thread ends his execution
  */
 void mythread_exit(void *value_ptr)
 {
@@ -23,9 +23,6 @@ void mythread_exit(void *value_ptr)
 
     /* Don't remove the node from the list yet. We still have to collect the return value */
 
-    // /* Change the state of any thread waiting on us. FIFO dispatcher will do the
-    //  * needful
-    //  */
     if (thread->blockedForJoin != NULL)
     {
         thread->blockedForJoin->state = READY;

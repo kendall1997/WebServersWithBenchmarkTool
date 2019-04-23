@@ -1,7 +1,3 @@
-/*
- * mythread.h -- interface of user threads library
- */
-
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,4 +13,4 @@
 
 void mythread_sched(char *scheduler);
 
-#endif /* MYTHREAD_H */
+#endif
