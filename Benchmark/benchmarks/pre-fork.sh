@@ -2,10 +2,10 @@
 . general.sh
 
 #name of the file .csv
-FILE=Benchmark_1_FIFO.csv
+FILE=Benchmark_Pre-Fork.csv
 
 #Port of WebServer
-Port = 8003
+Port = 8007
 
 touch $FILE
 
