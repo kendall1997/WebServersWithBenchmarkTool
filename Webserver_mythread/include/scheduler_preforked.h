@@ -13,9 +13,9 @@
 #include <queue.h>
 
 static int preforked_started = FALSE;
-int* preforked_poolConsume;
+int *preforked_poolConsume;
 
-void scheduler_preforked(int slot, struct Queue* requests, int poolSize);
-void preforked_task(int slot, struct Queue* requests);
+void scheduler_preforked(int slot, struct Queue *requests, int poolSize);
+void preforked_task(int slot, struct Queue *requests);
 
 #endif

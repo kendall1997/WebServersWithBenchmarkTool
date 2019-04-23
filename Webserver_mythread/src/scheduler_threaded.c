@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <pthread.h>
+// #include <pthread.h>
 #include <../../mythreads/mythread.h>
 #include <../../mythreads/mymutex.h>
 #include <scheduler_threaded.h>

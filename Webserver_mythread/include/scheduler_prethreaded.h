@@ -11,7 +11,7 @@
 #define TRUE 1
 
 #include <queue.h>
-#include <pthread.h>
+// #include <pthread.h>
 #include <../../mythreads/mythread.h>
 #include <../../mythreads/mymutex.h>
 
