@@ -4,6 +4,9 @@
 #name of the file .csv
 FILE=Benchmark_1_FIFO.csv
 
+#Port of WebServer
+Port = 8001
+
 touch $FILE
 
 # call the tools of Benchmark with the respective parameters

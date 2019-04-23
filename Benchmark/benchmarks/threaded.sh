@@ -4,6 +4,9 @@
 #name of the file .csv
 FILE=Benchmark_1_Threaded.csv
 
+#Port of WebServer
+Port = 8005
+
 touch $FILE
 
 # call the tools of Benchmark with the respective parameters

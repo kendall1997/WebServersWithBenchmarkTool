@@ -4,6 +4,9 @@
 #name of the file .csv
 FILE=Benchmark_Pre-Fork.csv
 
+#Port of WebServer
+Port = 8007
+
 touch $FILE
 
 # call the tools of Benchmark with the respective parameters
