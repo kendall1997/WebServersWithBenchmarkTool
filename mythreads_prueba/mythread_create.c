@@ -95,11 +95,11 @@ int pthread_create(pthread_t *new_thread_ID, pthread_attr_t *attr, void *start_f
     }
 
     /* Save the tid returned by clone system call in the pthread_t. */
-    new_thread_ID->tid = tid;
+    new_thread_ID = tid;
     new_node->tid = tid;
 
     setbuf(stdout, NULL);
-    printf("create: Finished initialising new thread: %ld\n", (unsigned long)new_thread_ID->tid);
+    printf("create: Finished initialising new thread: %ld\n", (unsigned long)new_thread_ID);
 
     kill(tid, SIGSTOP);
     // tid = kill(tid, SIGSTOP);
