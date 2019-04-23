@@ -17,6 +17,7 @@
 #include <scheduler_forked.h>
 #include <scheduler_threaded.h>
 #include <scheduler_prethreaded.h>
+#include <scheduler_preforked.h>
 
 void startScheduler(struct config inheritedEnvironment){
   // Storing environment
@@ -67,6 +68,10 @@ void scheduler(int slot){
   }else if(strcmp(SCHEDULER,"PRETHREADED") == 0){ // Handler for PRETHREADED algorithm
 
     scheduler_prethreaded(slot, requests, environment.pool);
+
+  }else if(strcmp(SCHEDULER,"PREFORKED") == 0){ // Handler for PREFORKED algorithm
+    
+    scheduler_preforked(slot, requests, environment.pool);
 
   }else{ // Default is going to be FIFO
 
