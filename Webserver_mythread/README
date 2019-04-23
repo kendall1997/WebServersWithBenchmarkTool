@@ -1,0 +1,131 @@
+# Costa Rica Institute of Technology
+# Computer Engineering
+# Operating Systems
+
+
+README
+
+0. Definitions
+  
+  HOST: Local machine where docker is being installed and running.
+
+
+1. System Requirements
+
+
+1.1 Host machine
+  This software was developed and tested on a machine with the next specs:
+    
+    Processor: Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz
+    RAM: 1 Channel, 2 DIMMs per channel: 6 GB
+    OS: 18.04.1 LTS (Bionic Beaver)
+    Kernel: 4.15.0-46-generic
+
+1.2 Docker Requirements
+  To install Docker CE, you need the 64-bit version of one of these Ubuntu versions:
+
+  Cosmic 18.10
+  Bionic 18.04 (LTS)
+  Xenial 16.04 (LTS)
+  Docker CE is supported on x86_64 (or amd64), armhf, arm64, s390x (IBM Z), and ppc64le (IBM Power) architectures.
+
+2. Install Docker
+  
+  To perform this action execute the installDocker.sh bash script.
+
+3. Run instructions
+  
+  3.1 All-in-one: This will install docker, build our own image, then create a docker instance. Type:
+
+    $ make fullDocker
+
+4. Useful commands
+
+  4.1 This will build the image and then create the container, finally will install the webserver into the container and install it with make command inside the container.
+
+    $ make create
+
+  4.2 This will list the containers created
+
+    $ make list
+
+  4.3 Once the container is running:
+
+    4.3.1 Stop the container [The container name is unique: see environment.sh file]
+
+      $ make stop
+
+    4.3.2 Resume the stopped container:
+
+      $ make start
+
+    4.3.3 If the container is running, you can attach the current terminal to the container's terminal:
+
+      $ make terminal
+
+    4.3.4 The container can be deleted by executing:
+
+      $ make remove
+
+5. Testing
+
+  For testing purposes (the container is useful by itself, this is not needed) we have created some volumes (bind a directory in the host machine with a directory in a container) to have easily important files inside the container in the host machine. In a real application this is used to keep the persistent files outside the container.
+
+  Mapping
+
+    Ports
+    CONTAINER       -> HOST
+    8001            -> 9001
+    
+    Folders
+    CONTAINER       -> HOST
+    /etc/webserver/ -> $BASE/conf
+    /var/webserver/ -> $BASE/www
+    /var/log/       -> $BASE/log
+
+    The $BASE contant means the relative folder where the source code is (pwd).
+
+    So, the webserver's config file inside a container will be stored in the host machine in the conf folder.
+
+    The directory where the webserver's will be looking for files in the host machine is the www folder.
+
+    The webserver's log inside a container will be stored in the host machine in the conf log.
+
+  How to test (the container must be running)
+
+  1. Open a webbrowser (i.e Mozilla Firefox)
+    http://localhost:9001/
+
+  2. To change the host port
+    2.1 Stop, Destroy any current container:
+      2.1.1 make stop
+      2.1.2 make remove
+
+    2.2 Update in the environment.sh file the HOST_PORT variable.
+    2.3 Create a new container
+      2.3.1 make create
+    2.4 Open a webbrowser
+      http://localhost:NEW_PORT/
+
+  3. Change webserver's port inside a container
+    3.1 Go to conf folder in the host machine
+    3.2 Change the PORT value.
+    3.3 Open a terminal in the webserver's container
+      3.3.1 make terminal
+    3.4 Go to the installation folder inside the container
+      3.4.1 cd /root/webserver/
+    3.5 Reset the daemon
+      3.5.1 make service-restart
+    3.6 Make a request with curl to the new port
+      3.6.1 curl http://localhost:NEW_PORT
+
+  4. Log
+    4.1 Go to the log folder
+    4.2 View webserver.log content
+      4.2.1 If you cant to see the content as soon as new lines are added please attach a terminal and go to the /var/log/ folder then type tail -f webserver.log. This does not work very well in the host machine.
+      4.2.2 See a final result cat webserver.log content
+
+  5. Add more files to serve in the webserver:
+    5.1 Put any desired file in the www folder in the host machine.
+
+
