@@ -2,7 +2,7 @@
 . general.sh
 
 #name of the file .csv
-FILE=Benchmark_1_FIFO.csv
+FILE=Benchmark_1_Pre-Threaded.csv
 
 touch $FILE
 
