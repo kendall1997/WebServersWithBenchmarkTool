@@ -31,35 +31,35 @@ Port9=8009
 touch $FILE
 
 # call the tools of Benchmark with the respective parameters for the WebServerFIFO
-for threads in {$Thread}
+for threads in {2..4}
 do
    echo -e "Downloading file with $threads threads and $Cycle Cycles in the WebServer FIFO\n" >> $FILE
    ./bclient $IP $Port $N_File $threads $Cycle >> $FILE 
 done
 
 # call the tools of Benchmark with the respective parameters for the WebServerForked
-for threads in {$Thread}
+for threads in {2..4}
 do
    echo -e "Downloading file with $threads threads and $Cycle Cycles in the WebServer Forked\n" >> $FILE
    ./bclient $IP $Port3 $N_File $threads $Cycle >> $FILE 
 done
 
 # call the tools of Benchmark with the respective parameters for the WebServerThreaded
-for threads in {$Thread}
+for threads in {2..4}
 do
    echo -e "Downloading file with $threads threads and $Cycle Cycles in the WebServer Threaded\n" >> $FILE
    ./bclient $IP $Port5 $N_File $threads $Cycle >> $FILE 
 done
 
 # call the tools of Benchmark with the respective parameters for the WebServerPre-fork
-for threads in {$Thread}
+for threads in {2..4}
 do
    echo -e "Downloading file with $threads threads and $Cycle Cycles in the WebServer Pre-Fork\n" >> $FILE
    ./bclient $IP $Port7 $N_File $threads $Cycle >> $FILE 
 done
 
 # call the tools of Benchmark with the respective parameters for the WebServerPre-Threaded
-for threads in {$Thread}
+for threads in {2..4}
 do
    echo -e "Downloading file with $threads threads and $Cycle Cyclesin the WebServer Pre-Threaded\n" >> $FILE
    ./bclient $IP $Port9 $N_File $threads $Cycle >> $FILE 

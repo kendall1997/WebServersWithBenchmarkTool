@@ -29,11 +29,11 @@ void work(char* url, int threads, int cycles);
 void* task(void* args);
 
 int main(int argc, char const *argv[]){
-  char* host = argv[1];
-  char* port = argv[2];
-  char* file = argv[3];
-  char* threads_str = argv[4];
-  char* cycles_str = argv[5];
+  char* host = (char*) argv[1];
+  char* port = (char*) argv[2];
+  char* file = (char*) argv[3];
+  char* threads_str = (char*) argv[4];
+  char* cycles_str = (char*) argv[5];
 
   int threads = atoi(threads_str);
   int cycles = atoi(cycles_str);
@@ -76,16 +76,12 @@ void work (char* url, int threads, int cycles){
   int thread_join_counter;
   for(thread_join_counter = 0; thread_join_counter < threads; ++thread_join_counter){
     //printf("Waiting for %d\n", thread_join_counter);
-    pthread_join( &thread[thread_join_counter],NULL );
+    pthread_join( thread[thread_join_counter],NULL );
   }
-
-  printf("Acá ####\n");
 
   int task_count;
   for(task_count = 0; task_count < total_runs; ++task_count){
-    struct summary* run = &results[task_count];
-
-   
+    struct summary* run = &results[task_count];   
   }
 
 
