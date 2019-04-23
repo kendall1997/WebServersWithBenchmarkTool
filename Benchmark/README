@@ -1,3 +1,7 @@
+To Install dependencies
+
+$ ./install.sh
+
 To compile
 
 $ make
@@ -11,3 +15,9 @@ This will run the benchmark with the host, port and uri given, with 2 threads an
 The output will be in the terminal's standard output, to store the result in a file in disk, run:
 
 $ ./Benchmark autogestion.metrotel.com.ar 80 speedtest/archivo10MB.zip 2 2 > data.csv
+
+
+Also, can execute the benchmark suite directly: 
+	./Benchmark_image.sh
+	./Benchmark_iso.sh
+	./Benchmark_multimedia.sh
