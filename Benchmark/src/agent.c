@@ -8,7 +8,8 @@
 #include <agent.h>
  
 
- 
+//Function that stores the data received
+
 static size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream)
 {
   struct FtpFile *out = (struct FtpFile *)stream;
@@ -21,6 +22,7 @@ static size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream)
   return fwrite(buffer, size, nmemb, out->stream);
 }
 
+//Struct that is responsible for making requests to the server and return the requested data
 struct summary* pull(char* url){
 
   CURL *curl;
@@ -33,6 +35,7 @@ struct summary* pull(char* url){
   char *filename = (char*) (strrchr(url, '/') + 1);
   char* ext = (char*) (strrchr(url, '.') + 1);
 
+  //Struct that stores the data received
   struct FtpFile ftpfile = {
     "/dev/null", /* name to store the file as if successful */ 
     NULL
@@ -43,11 +46,9 @@ struct summary* pull(char* url){
  
   curl = curl_easy_init();
   if(curl) {
-    /*
-     * You better replace the URL with one that works!
-     */ 
+    
     curl_easy_setopt(curl, CURLOPT_URL, url);
-    //curl_easy_setopt (curl, CURLOPT_USERAGENT, "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0");
+  
     /* Define our callback to get called when there's data to be written */ 
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
     /* Set a pointer to our struct to pass to the callback */ 
@@ -85,6 +86,9 @@ struct summary* pull(char* url){
   size = size/(1000*1000);
   speedmed = speedmed/(1000*1000);
   
+
+  //Struct that stores the information of the requests of server
+
   struct summary* tmp = malloc(sizeof(struct summary));
 
   tmp->ResponseTime = (int) seconds;
